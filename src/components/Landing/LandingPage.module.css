@@ -1,0 +1,39 @@
+.landing {
+  position: fixed;
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 100%;
+  background-image: url(../../assets/background.png);
+}
+
+.landing .header {
+  padding: 25px 0 25px;
+  margin: 0px 70px;
+  border-bottom: 1px solid #1a1a1a;
+}
+
+.landing .buttonDiv {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-repeat: no-repeat;
+  margin-top: 424px;
+}
+
+.backgroundDiv {
+  position: absolute;
+  left: 1076px;
+  top: 473px;
+}
+
+.landing .landingButton {
+  background: #1a1a1a;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 24px;
+  color: #ffffff;
+  padding: 18px 126px;
+}

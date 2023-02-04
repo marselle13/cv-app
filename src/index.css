@@ -1,8 +1,18 @@
 @font-face {
   font-family: "helvetic";
-  src: url(./assets/fonts/HelveticaNeue.ttc);
+  src: url(./assets/fonts/HelveticaNeue.ttc) format("truetype");
 }
 
 html {
   font-family: "helvetic", sans-serif;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }

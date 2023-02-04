@@ -1,0 +1,11 @@
+.personal {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.personal .formgrid {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  column-gap: 60px;
+}

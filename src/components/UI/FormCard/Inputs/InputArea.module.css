@@ -1,0 +1,22 @@
+.areaDiv {
+  margin-bottom: 34px;
+}
+
+.areaDiv label {
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 21px;
+  color: #000000;
+}
+
+.areaDiv textarea {
+  width: 100%;
+  padding: 16px;
+  resize: none;
+  font-family: "Helvetica Neue";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 21px;
+  margin-top: 0.5rem;
+}

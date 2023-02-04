@@ -5,7 +5,7 @@ import CV from "../CV/CV";
 const Personal = () => {
   return (
     <div>
-      <div style={{ display: "flex", height: "100%" }}>
+      <div style={{ display: "flex" }}>
         <FormCard label="პირადი ინფო" number="1">
           <PersonalForm />
         </FormCard>

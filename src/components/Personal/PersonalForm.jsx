@@ -4,14 +4,30 @@ import InputUpload from "../UI/FormCard/Inputs/InputUpload";
 import InputArea from "../UI/FormCard/Inputs/InputArea";
 import { useContext } from "react";
 import cvContext from "../Store/cvContext";
+import NextPageButton from "../UI/FormCard/Buttons/NextPageButton";
+import { useNavigate } from "react-router-dom";
 
 const PersonalForm = () => {
   const ctx = useContext(cvContext);
+  const navigate = useNavigate();
   const { cvChangeHandler } = ctx;
   const { cvData } = ctx;
   const { cvIsValid } = ctx;
+  const checkValidation =
+    cvIsValid.nameIsValid &&
+    cvIsValid.lastnameIsValid &&
+    cvIsValid.emailIsValid &&
+    cvIsValid.mobileIsValid &&
+    cvData.enteredImage;
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    if (checkValidation) {
+      navigate("/experience");
+    }
+  };
   return (
-    <form className={classes.personal}>
+    <form className={classes.personal} onSubmit={submitHandler}>
       <div className={classes.formgrid}>
         <Input
           label="სახელი"
@@ -56,6 +72,7 @@ const PersonalForm = () => {
           />
         </div>
       </div>
+      <NextPageButton />
     </form>
   );
 };

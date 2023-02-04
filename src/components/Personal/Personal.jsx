@@ -1,8 +1,11 @@
+import FormCard from "../UI/FormCard/FormCard";
+import PersonalForm from "./PersonalForm";
+
 const Personal = () => {
   return (
-    <div>
-      <h1>hello</h1>
-    </div>
+    <FormCard label="პირადი ინფო" number="1">
+      <PersonalForm />
+    </FormCard>
   );
 };
 

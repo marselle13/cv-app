@@ -1,0 +1,52 @@
+.personal .formDiv {
+  display: flex;
+  flex-direction: column;
+}
+
+.formDiv label {
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 21px;
+  color: #000;
+}
+
+.inputDiv {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.inputDiv input {
+  font-family: "helvetic", sans-serif;
+  width: 100%;
+  padding: 15px;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 21px;
+  color: rgba(0, 0, 0, 0.6);
+  border: 1px solid #bcbcbc;
+  border-radius: 4px;
+  margin: 0.5rem 0;
+}
+
+.inputDiv .pass {
+  position: absolute;
+  right: 10px;
+}
+
+.inputDiv .error {
+  position: absolute;
+  right: -30px;
+}
+
+.formDiv input:focus {
+  outline: 2px solid #bcbcbc;
+  color: #000;
+}
+
+.formDiv span {
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 21px;
+  color: #2e2e2e;
+}

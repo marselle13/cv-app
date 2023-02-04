@@ -4,10 +4,12 @@ import Personal from "./components/Personal/Personal";
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<LandingPage />} />
-      <Route path="/personal" element={<Personal />}></Route>
-    </Routes>
+    <div>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/personal" element={<Personal />} />
+      </Routes>
+    </div>
   );
 }
 

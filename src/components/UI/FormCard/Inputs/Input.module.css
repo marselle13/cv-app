@@ -10,6 +10,10 @@
   color: #000;
 }
 
+.formDiv .errorLabel {
+  color: #e52f2f;
+}
+
 .inputDiv {
   position: relative;
   display: flex;

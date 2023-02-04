@@ -5,7 +5,14 @@ import errorIcon from "../../../../assets/error-icon.png";
 const Input = (props) => {
   return (
     <div className={classes.formDiv}>
-      <label htmlFor="">{props.label}</label>
+      <label
+        htmlFor=""
+        className={`${
+          !props.isValid && props.value.length !== 0 ? classes.errorLabel : ""
+        }`}
+      >
+        {props.label}
+      </label>
       <div className={classes.inputDiv}>
         <input
           type="text"

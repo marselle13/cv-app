@@ -1,0 +1,48 @@
+.personalDiv {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 20px;
+}
+
+.nameDiv h2 {
+  font-weight: 700;
+  font-size: 34px;
+  line-height: 42px;
+  color: #f93b1d;
+  margin-bottom: 17px;
+}
+
+.personalDiv .contactDiv {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 18px;
+  line-height: 21px;
+  color: #1a1a1a;
+  margin-bottom: 10px;
+}
+
+.bioDiv {
+  margin-top: 24px;
+}
+
+.bioDiv label {
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 22px;
+  color: #f93b1d;
+}
+
+.bioDiv p {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 22px;
+  text-transform: lowercase;
+  color: #000000;
+}
+
+.imageDiv img {
+  width: 250px;
+  height: 250px;
+  border-radius: 133px;
+}

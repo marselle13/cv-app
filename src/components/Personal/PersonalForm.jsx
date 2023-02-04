@@ -1,59 +1,60 @@
 import classes from "./PersonalForm.module.css";
 import Input from "../UI/FormCard/Inputs/Input";
-import useInput from "../hooks/use-input";
 import InputUpload from "../UI/FormCard/Inputs/InputUpload";
 import InputArea from "../UI/FormCard/Inputs/InputArea";
+import { useContext } from "react";
+import cvContext from "../Store/cvContext";
 
 const PersonalForm = () => {
-  const regexGeorgian = /^[\u10A0-\u10FF]+$/;
-  const regexEmail = /^([A-Za-z0-9_\-\.])+\@([redberry])+\.(ge)$/;
-  const {
-    value: enteredName,
-    isValid: nameIsValid,
-    valueChangeHandler: nameChangeHandler,
-  } = useInput((value) => regexGeorgian.test(value) && value.trim().length > 1);
-  const {
-    value: enteredLastname,
-    isValid: lastnameIsValid,
-    valueChangeHandler: lastnameChangeHandler,
-  } = useInput((value) => regexGeorgian.test(value) && value.trim().length > 1);
-  const {
-    value: enteredEmail,
-    isValid: emailIsValid,
-    valueChangeHandler: emailChangeHandler,
-  } = useInput((value) => regexEmail.test(value));
-
+  const ctx = useContext(cvContext);
+  const { cvChangeHandler } = ctx;
+  const { cvData } = ctx;
+  const { cvIsValid } = ctx;
   return (
     <form className={classes.personal}>
       <div className={classes.formgrid}>
         <Input
           label="სახელი"
           valid="მინიმუმ 2 ასო, ქართული ასოები"
-          onChange={nameChangeHandler}
-          value={enteredName}
-          isValid={nameIsValid}
+          onChange={cvChangeHandler.nameChangeHandler}
+          value={cvData.enteredName}
+          isValid={cvIsValid.nameIsValid}
           placeholder="ანზორი"
         />
         <Input
           label="გვარი"
           valid="მინიმუმ 2 ასო, ქართული ასოები"
-          onChange={lastnameChangeHandler}
-          value={enteredLastname}
-          isValid={lastnameIsValid}
+          onChange={cvChangeHandler.lastnameChangeHandler}
+          value={cvData.enteredLastname}
+          isValid={cvIsValid.lastnameIsValid}
           placeholder="მუმლაძე"
         />
       </div>
       <div>
-        <InputUpload />
-        <InputArea rows="5" />
+        <InputUpload onChange={cvChangeHandler.uploadChangeHandler} />
+        <InputArea
+          rows="5"
+          onChange={cvChangeHandler.bioChangeHandler}
+          value={cvData.enteredBio}
+        />
         <Input
           label="ელ.ფოსტა"
           valid="უნდა მთავრდებოდეს @redberry.ge-ით"
-          onChange={emailChangeHandler}
-          value={enteredEmail}
-          isValid={emailIsValid}
+          onChange={cvChangeHandler.emailChangeHandler}
+          value={cvData.enteredEmail}
+          isValid={cvIsValid.emailIsValid}
           placeholder="anzorr666@redberry.ge"
         />
+        <div style={{ marginTop: "26px" }}>
+          <Input
+            label="მობილურის ნომერი"
+            valid="უნდა აკმაყოფილებდეს ქართული მობილურის ნომრის ფორმატს"
+            onChange={cvChangeHandler.mobileChangeHandler}
+            value={cvData.enteredMobile}
+            isValid={cvIsValid.mobileIsValid}
+            placeholder="+995 551 12 34 56"
+          />
+        </div>
       </div>
     </form>
   );

@@ -1,13 +1,21 @@
 import classes from "./Input.module.css";
-import passIcon from "../../../assets/pass-icon.png";
-import errorIcon from "../../../assets/error-icon.png";
+import passIcon from "../../../../assets/pass-icon.png";
+import errorIcon from "../../../../assets/error-icon.png";
 
 const Input = (props) => {
   return (
     <div className={classes.formDiv}>
       <label htmlFor="">{props.label}</label>
       <div className={classes.inputDiv}>
-        <input type="text" onChange={props.onChange} value={props.value} />
+        <input
+          type="text"
+          onChange={props.onChange}
+          value={props.value}
+          className={`${props.isValid && classes.passBorder} ${
+            !props.isValid && props.value.length !== 0 && classes.errorBorder
+          }`}
+          placeholder={props.placeholder}
+        />
         {props.isValid && (
           <img src={passIcon} alt="pass" className={classes.pass} />
         )}

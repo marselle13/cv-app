@@ -23,10 +23,14 @@
   font-weight: 400;
   font-size: 16px;
   line-height: 21px;
-  color: rgba(0, 0, 0, 0.6);
-  border: 1px solid #bcbcbc;
+  color: #000;
+  border: 1px solid #bcbcbc !important;
   border-radius: 4px;
   margin: 0.5rem 0;
+}
+
+.inputDiv input::placeholder {
+  color: rgba(0, 0, 0, 0.6);
 }
 
 .inputDiv .pass {
@@ -49,4 +53,12 @@
   font-size: 14px;
   line-height: 21px;
   color: #2e2e2e;
+}
+
+.formDiv .passBorder {
+  outline: 1px solid #98e37e !important;
+}
+
+.formDiv .errorBorder {
+  outline: 1px solid #ef5050 !important;
 }

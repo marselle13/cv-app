@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import classes from "./NextPageButton.module.css";
 
 const NextPageButton = (props) => {

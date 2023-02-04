@@ -1,0 +1,12 @@
+.experience {
+  border-bottom: 1px solid #bcbcbc;
+  padding-bottom: 24px;
+  margin-bottom: 34px;
+}
+
+.formgrid {
+  margin: 30px 0;
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  column-gap: 60px;
+}

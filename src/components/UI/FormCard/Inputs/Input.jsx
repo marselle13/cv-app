@@ -4,7 +4,7 @@ import errorIcon from "../../../../assets/error-icon.png";
 
 const Input = (props) => {
   return (
-    <div className={classes.formDiv}>
+    <div className={classes.formDiv} style={props.style}>
       <label
         htmlFor=""
         className={`${

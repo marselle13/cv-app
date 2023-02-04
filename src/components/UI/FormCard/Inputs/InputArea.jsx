@@ -3,9 +3,9 @@ import classes from "./InputArea.module.css";
 const InputArea = (props) => {
   return (
     <div className={classes.areaDiv}>
-      <label htmlFor="">ჩემ შესახებ (არასავალდებულო)</label>
+      <label>{props.label}</label>
       <textarea
-        placeholder="ზოგადი ინფო შენ შესახებ"
+        placeholder={props.placeholder}
         rows={props.rows}
         onChange={props.onChange}
         value={props.value}

@@ -9,7 +9,10 @@ const PersonalCV = () => {
   const { cvData } = ctx;
 
   return (
-    <div className={classes.personalDiv}>
+    <div
+      className={classes.personalDiv}
+      style={{ borderBottom: ctx.border && "1px solid  #C8C8C8" }}
+    >
       <div>
         {(cvData.enteredName || cvData.enteredLastname) && (
           <div className={classes.nameDiv}>
@@ -37,9 +40,10 @@ const PersonalCV = () => {
           </div>
         )}
       </div>
-
       <div className={classes.imageDiv}>
-        {cvData.enteredImage && <img src={cvData.enteredImage} />}
+        {cvData.enteredImage && (
+          <img src={cvData.enteredImage} alt="personal" />
+        )}
       </div>
     </div>
   );

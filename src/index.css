@@ -9,6 +9,7 @@ html {
 
 body {
   overflow-x: hidden;
+  background-color: rgba(188, 188, 188, 0.3);
 }
 
 * {

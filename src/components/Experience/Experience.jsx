@@ -1,6 +1,6 @@
 import FormCard from "../UI/FormCard/FormCard";
 import CV from "../CV/CV";
-import ExperienceForm from "./ExperienceFormInputs";
+import ExperienceForm from "./ExperienceForm";
 
 const Experience = () => {
   return (

@@ -22,6 +22,7 @@ const Input = (props) => {
             !props.isValid && props.value.length !== 0 && classes.errorBorder
           }`}
           placeholder={props.placeholder}
+          name={props.name}
         />
         {props.isValid && (
           <img src={passIcon} alt="pass" className={classes.pass} />

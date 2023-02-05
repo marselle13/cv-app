@@ -8,6 +8,8 @@ const cvContext = React.createContext({
   cvIsValid: {},
   cvChangeHandler: {},
   submitHandler: () => {},
+  addMoreHandler: () => {},
+  expHandler: () => {},
 });
 
 export const CVContextProvider = (props) => {
@@ -27,6 +29,10 @@ export const CVContextProvider = (props) => {
     (value) => regexGeorgian.test(value.trim()) && value.trim().length > 1
   );
 
+  const bioChangeHandler = (e) => {
+    setEnteredBio(e.target.value);
+  };
+
   const {
     value: enteredLastname,
     isValid: lastnameIsValid,
@@ -39,47 +45,16 @@ export const CVContextProvider = (props) => {
     const uploadImage = e.target.files[0];
     setEnteredImage(URL.createObjectURL(uploadImage));
   };
-
   const {
     value: enteredEmail,
     isValid: emailIsValid,
     valueChangeHandler: emailChangeHandler,
   } = useInput((value) => regexEmail.test(value.trim()));
-
   const {
     value: enteredMobile,
     isValid: mobileIsValid,
     valueChangeHandler: mobileChangeHandler,
   } = useInput((value) => regexMobile.test(value.trim()));
-
-  const {
-    value: enteredPosition,
-    isValid: positionIsValid,
-    valueChangeHandler: positionChangeHandler,
-  } = useInput((value) => value.trim().length > 1);
-
-  const {
-    value: enteredEmployer,
-    isValid: employerIsValid,
-    valueChangeHandler: employerChangeHandler,
-  } = useInput((value) => value.trim().length > 1);
-
-  const bioChangeHandler = (e) => {
-    setEnteredBio(e.target.value);
-  };
-
-  const {
-    value: enteredStartingDate,
-    isValid: startingDateIsValid,
-    valueChangeHandler: startingDateHandler,
-  } = useInput((value) => value.trim().length !== 0);
-
-  const {
-    value: enteredEndDate,
-    isValid: endDateIsValid,
-    valueChangeHandler: endDateHandler,
-  } = useInput((value) => value.trim().length !== 0);
-
   const checkValidationPersonal =
     nameIsValid &&
     lastnameIsValid &&
@@ -95,6 +70,81 @@ export const CVContextProvider = (props) => {
     }
   };
 
+  const [experience, setExperience] = useState([
+    {
+      position: "",
+      employer: "",
+      startDate: "",
+      endDate: "",
+      errors: {
+        position: false,
+        employer: false,
+        startDate: false,
+        endDate: false,
+      },
+    },
+  ]);
+
+  const expHandler = (index, field, value) => {
+    const updateForms = [...experience];
+    updateForms[index][field] = value;
+    updateForms[index].errors = isValidExp(experience[index]);
+    setExperience(updateForms);
+  };
+
+  const isValidExp = (form) => {
+    console.log(form.startDate);
+    let valid = {
+      position: false,
+      employer: false,
+      startDate: false,
+      endDate: false,
+    };
+    if (form.position.trim().length > 1) {
+      valid.position = true;
+    } else {
+      valid.position = false;
+    }
+
+    if (form.employer.trim().length > 1) {
+      valid.employer = true;
+    } else {
+      valid.employer = false;
+    }
+
+    if (form.startDate.length !== 0) {
+      valid.startDate = true;
+    } else {
+      valid.startDate = false;
+    }
+
+    if (form.endDate.length !== 0) {
+      valid.endDate = true;
+    } else {
+      valid.endDate = false;
+    }
+
+    return valid;
+  };
+  const addExp = (e) => {
+    e.preventDefault();
+    setExperience([
+      ...experience,
+      {
+        position: "",
+        employer: "",
+        startDate: "",
+        endDate: "",
+        errors: {
+          position: false,
+          employer: false,
+          startDate: false,
+          endDate: false,
+        },
+      },
+    ]);
+  };
+
   return (
     <cvContext.Provider
       value={{
@@ -105,20 +155,13 @@ export const CVContextProvider = (props) => {
           enteredImage,
           enteredEmail,
           enteredMobile,
-          enteredPosition,
-          enteredEmployer,
-          enteredStartingDate,
-          enteredEndDate,
+          experience,
         },
         cvIsValid: {
           nameIsValid,
           lastnameIsValid,
           emailIsValid,
           mobileIsValid,
-          positionIsValid,
-          employerIsValid,
-          startingDateIsValid,
-          endDateIsValid,
         },
         cvChangeHandler: {
           nameChangeHandler,
@@ -127,11 +170,9 @@ export const CVContextProvider = (props) => {
           uploadChangeHandler,
           emailChangeHandler,
           mobileChangeHandler,
-          positionChangeHandler,
-          employerChangeHandler,
-          startingDateHandler,
-          endDateHandler,
+          expHandler,
         },
+        addExp,
         submitHandler,
         border,
       }}

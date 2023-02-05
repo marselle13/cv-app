@@ -3,7 +3,7 @@
   flex-direction: column;
   justify-content: space-between;
   gap: 1rem;
-  align-items: start;
+  align-items: flex-start;
   max-width: 822px;
   max-height: 1080px;
   width: 100%;

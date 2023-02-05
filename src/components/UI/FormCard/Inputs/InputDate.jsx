@@ -1,7 +1,6 @@
 import classes from "./InputDate.module.css";
 
 const InputDate = (props) => {
-  console.log(props);
   return (
     <div className={classes.dateDiv}>
       <label htmlFor="">{props.label}</label>

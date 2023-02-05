@@ -1,12 +1,31 @@
 .experience {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.experienceInputDiv {
   border-bottom: 1px solid #bcbcbc;
   padding-bottom: 24px;
   margin-bottom: 34px;
 }
 
-.formgrid {
+.experience .formgrid {
   margin: 30px 0;
   display: grid;
   grid-template-columns: repeat(2, auto);
   column-gap: 60px;
+}
+
+.buttonContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 20%;
+  margin-top: 8px;
+}
+
+.experience .backNextDiv {
+  display: flex;
+  justify-content: space-between;
 }

@@ -26,3 +26,7 @@
 .areaDiv textarea:focus {
   outline: 2px solid #bcbcbc;
 }
+
+.areaDiv .passBorder {
+  outline: 1px solid #98e37e !important;
+}

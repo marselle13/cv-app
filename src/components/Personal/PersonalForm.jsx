@@ -36,7 +36,7 @@ const PersonalForm = () => {
       <div>
         <InputUpload onChange={cvChangeHandler.uploadChangeHandler} />
         <InputArea
-          rows="5"
+          rows="4"
           label="ჩემ შესახებ (არასავალდებულო)"
           onChange={cvChangeHandler.bioChangeHandler}
           value={cvData.enteredBio}
@@ -61,7 +61,7 @@ const PersonalForm = () => {
           />
         </div>
       </div>
-      <NextPageButton />
+      <NextPageButton onClick={ctx.submitHandlerPersonal} />
     </form>
   );
 };

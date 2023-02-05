@@ -1,0 +1,43 @@
+.expDiv {
+  margin-top: 24px;
+}
+
+.expDiv h4 {
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 22px;
+  color: #f93b1d;
+}
+
+.expDiv .workDiv {
+  margin: 15px 0 7px;
+  display: flex;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  width: 100%;
+  color: #1a1a1a;
+}
+
+.borderBottom {
+  padding-bottom: 19px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #bcbcbc;
+}
+
+.expDiv .dateDiv {
+  margin-bottom: 15px;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 19px;
+  color: #919191;
+}
+
+.expDiv p {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 22px;
+  text-transform: capitalize;
+  color: #000000;
+}

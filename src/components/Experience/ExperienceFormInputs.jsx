@@ -7,7 +7,6 @@ import InputArea from "../UI/FormCard/Inputs/InputArea";
 
 const ExperienceFormInputs = (props) => {
   const ctx = useContext(cvContext);
-  console.log(ctx.expHandler);
   const { cvChangeHandler } = ctx;
   const { cvData } = ctx;
 
@@ -23,7 +22,7 @@ const ExperienceFormInputs = (props) => {
               cvChangeHandler.expHandler(index, "position", event.target.value)
             }
             value={form.position}
-            isValid={form.errors.position}
+            isValid={form.isValid.position}
             placeholder="დეველოპერი, დიზაინერი, ა.შ."
           />
           <Input
@@ -34,7 +33,7 @@ const ExperienceFormInputs = (props) => {
               cvChangeHandler.expHandler(index, "employer", event.target.value)
             }
             value={form.employer}
-            isValid={form.errors.employer}
+            isValid={form.isValid.employer}
             placeholder="დამსაქმებელი"
             style={{ marginTop: "30px" }}
           />
@@ -51,7 +50,7 @@ const ExperienceFormInputs = (props) => {
                 )
               }
               value={form.startDate}
-              isValid={form.errors.startDate}
+              isValid={form.isValid.startDate}
             />
             <InputDate
               label="დამთავრების რიცხვი"
@@ -59,13 +58,23 @@ const ExperienceFormInputs = (props) => {
                 cvChangeHandler.expHandler(index, "endDate", event.target.value)
               }
               value={form.endDate}
-              isValid={form.errors.endDate}
+              isValid={form.isValid.endDate}
             />
           </div>
           <InputArea
+            name="description"
             label="აღწერა"
             rows="5"
             placeholder="როლი თანამდებობაზე და ზოგადი აღწერა"
+            onChange={(event) =>
+              cvChangeHandler.expHandler(
+                index,
+                "description",
+                event.target.value
+              )
+            }
+            value={form.description}
+            isValid={form.isValid.description}
           />
         </div>
       ))}

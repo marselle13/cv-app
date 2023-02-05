@@ -7,7 +7,7 @@ const cvContext = React.createContext({
   cvData: {},
   cvIsValid: {},
   cvChangeHandler: {},
-  submitHandler: () => {},
+  submitHandlerPersonal: () => {},
   addMoreHandler: () => {},
   expHandler: () => {},
 });
@@ -62,7 +62,7 @@ export const CVContextProvider = (props) => {
     mobileIsValid &&
     enteredImage;
 
-  const submitHandler = (e) => {
+  const submitHandlerPersonal = (e) => {
     e.preventDefault();
     if (checkValidationPersonal) {
       navigate("/experience");
@@ -76,11 +76,13 @@ export const CVContextProvider = (props) => {
       employer: "",
       startDate: "",
       endDate: "",
-      errors: {
+      description: "",
+      isValid: {
         position: false,
         employer: false,
         startDate: false,
         endDate: false,
+        description: false,
       },
     },
   ]);
@@ -88,17 +90,17 @@ export const CVContextProvider = (props) => {
   const expHandler = (index, field, value) => {
     const updateForms = [...experience];
     updateForms[index][field] = value;
-    updateForms[index].errors = isValidExp(experience[index]);
+    updateForms[index].isValid = isValidExp(experience[index]);
     setExperience(updateForms);
   };
 
   const isValidExp = (form) => {
-    console.log(form.startDate);
     let valid = {
       position: false,
       employer: false,
       startDate: false,
       endDate: false,
+      description: false,
     };
     if (form.position.trim().length > 1) {
       valid.position = true;
@@ -124,6 +126,12 @@ export const CVContextProvider = (props) => {
       valid.endDate = false;
     }
 
+    if (form.description.length !== 0) {
+      valid.description = true;
+    } else {
+      valid.description = false;
+    }
+
     return valid;
   };
   const addExp = (e) => {
@@ -135,11 +143,13 @@ export const CVContextProvider = (props) => {
         employer: "",
         startDate: "",
         endDate: "",
-        errors: {
+        description: "",
+        isValid: {
           position: false,
           employer: false,
           startDate: false,
           endDate: false,
+          description: false,
         },
       },
     ]);
@@ -173,7 +183,7 @@ export const CVContextProvider = (props) => {
           expHandler,
         },
         addExp,
-        submitHandler,
+        submitHandlerPersonal,
         border,
       }}
     >

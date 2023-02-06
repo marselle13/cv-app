@@ -110,46 +110,13 @@ export const CVContextProvider = (props) => {
     setExperience(updateForms);
   };
 
-  const isValidExp = (form) => {
-    let valid = {
-      position: false,
-      employer: false,
-      startDate: false,
-      endDate: false,
-      description: false,
-    };
-    if (form.position.trim().length > 1) {
-      valid.position = true;
-    } else {
-      valid.position = false;
-    }
-
-    if (form.employer.trim().length > 1) {
-      valid.employer = true;
-    } else {
-      valid.employer = false;
-    }
-
-    if (form.startDate.length !== 0) {
-      valid.startDate = true;
-    } else {
-      valid.startDate = false;
-    }
-
-    if (form.endDate.length !== 0) {
-      valid.endDate = true;
-    } else {
-      valid.endDate = false;
-    }
-
-    if (form.description.length !== 0) {
-      valid.description = true;
-    } else {
-      valid.description = false;
-    }
-
-    return valid;
-  };
+  const isValidExp = (form) => ({
+    position: form.position.trim().length > 1,
+    employer: form.employer.trim().length > 1,
+    startDate: form.startDate.length !== 0,
+    endDate: form.endDate.length !== 0,
+    description: form.description.length !== 0,
+  });
 
   const addExp = (e) => {
     e.preventDefault();

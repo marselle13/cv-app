@@ -9,7 +9,6 @@ const cvContext = React.createContext({
   cvChangeHandler: {},
   submitHandlerPersonal: () => {},
   addMoreHandler: () => {},
-  expHandler: () => {},
 });
 
 export const CVContextProvider = (props) => {
@@ -40,7 +39,6 @@ export const CVContextProvider = (props) => {
   } = useInput(
     (value) => regexGeorgian.test(value.trim()) && value.trim().length > 1
   );
-
   const uploadChangeHandler = (e) => {
     const uploadImage = e.target.files[0];
     setEnteredImage(URL.createObjectURL(uploadImage));
@@ -50,11 +48,13 @@ export const CVContextProvider = (props) => {
     isValid: emailIsValid,
     valueChangeHandler: emailChangeHandler,
   } = useInput((value) => regexEmail.test(value.trim()));
+
   const {
     value: enteredMobile,
     isValid: mobileIsValid,
     valueChangeHandler: mobileChangeHandler,
   } = useInput((value) => regexMobile.test(value.trim()));
+
   const checkValidationPersonal =
     nameIsValid &&
     lastnameIsValid &&
@@ -134,6 +134,7 @@ export const CVContextProvider = (props) => {
 
     return valid;
   };
+
   const addExp = (e) => {
     e.preventDefault();
     setExperience([
@@ -153,6 +154,31 @@ export const CVContextProvider = (props) => {
         },
       },
     ]);
+  };
+
+  const submitArrExp = experience.map((exp, index) => {
+    const submitIsValidExp =
+      experience[index].isValid.position &&
+      experience[index].isValid.employer &&
+      experience[index].isValid.startDate &&
+      experience[index].isValid.endDate &&
+      experience[index].isValid.description;
+
+    const { position, employer, startDate, endDate, description } = exp;
+    if (position || employer || startDate || endDate || description) {
+      return submitIsValidExp;
+    }
+  });
+
+  const submitHandlerExp = (e) => {
+    e.preventDefault();
+    const trueArr = submitArrExp.filter((item) => item === true);
+    const falseArr = submitArrExp.filter((item) => item === false);
+    submitArrExp.forEach((item) => {
+      if (trueArr.length > 0 && falseArr.length === 0) {
+        navigate("/education");
+      }
+    });
   };
 
   return (
@@ -182,9 +208,11 @@ export const CVContextProvider = (props) => {
           mobileChangeHandler,
           expHandler,
         },
+        border,
         addExp,
         submitHandlerPersonal,
-        border,
+        submitHandlerExp,
+        submitArrExp,
       }}
     >
       {props.children}

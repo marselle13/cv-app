@@ -5,10 +5,16 @@ import classes from "./ExpCV.module.css";
 const ExpCV = () => {
   const ctx = useContext(cvContext);
   const { cvData } = ctx;
+  const show = ctx.submitArrExp.filter(
+    (item) => item === true || item === false
+  );
+
+  console.log(cvData.experience);
 
   return (
     <div className={classes.expDiv}>
-      <h4>გამოცდილება</h4>
+      {show.length !== 0 && <h4>გამოცდილება</h4>}
+
       {cvData.experience.map((exp, index) => {
         const expCheck =
           cvData.experience[index].position ||
@@ -19,9 +25,7 @@ const ExpCV = () => {
 
         return (
           <div
-            className={
-              cvData.experience.length !== 0 && expCheck && classes.borderBottom
-            }
+            className={expCheck ? classes.borderBottom : classes.hidden}
             key={index}
           >
             <div className={classes.workDiv}>

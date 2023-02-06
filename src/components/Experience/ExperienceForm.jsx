@@ -22,7 +22,7 @@ const ExperienceForm = () => {
           <Link to="/personal">
             <BackPageButton />
           </Link>
-          <NextPageButton />
+          <NextPageButton onClick={ctx.submitHandlerExp} />
         </div>
       </div>
     </form>

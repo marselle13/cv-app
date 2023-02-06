@@ -2,6 +2,9 @@ import classes from "./Education.module.css";
 import Input from "../UI/FormCard/Inputs/Input";
 import { Fragment, useContext } from "react";
 import cvContext from "../Store/cvContext";
+import SelectInput from "../UI/FormCard/Inputs/SelectInput";
+import InputDate from "../UI/FormCard/Inputs/InputDate";
+import InputArea from "../UI/FormCard/Inputs/InputArea";
 const EducationFormInputs = () => {
   const ctx = useContext(cvContext);
   const { cvData } = ctx;
@@ -20,13 +23,13 @@ const EducationFormInputs = () => {
             }
             value={form.position}
             isValid={form.isValid.position}
-            placeholder="დეველოპერი, დიზაინერი, ა.შ."
+            placeholder="სასწავლებელი"
           />
-          <div>
-            <select name="" id="">
-              <option value=""></option>
-            </select>
+          <div className={classes.formgrid}>
+            <SelectInput />
+            <InputDate label="დამთავრების რიცხვი" />
           </div>
+          <InputArea label="აღწერა" rows="7" />
         </div>
       ))}
     </Fragment>

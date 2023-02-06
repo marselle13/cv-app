@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useInput from "../hooks/use-input";
 import { useNavigate } from "react-router-dom";
 
@@ -15,10 +15,26 @@ export const CVContextProvider = (props) => {
   const [enteredBio, setEnteredBio] = useState("");
   const [enteredImage, setEnteredImage] = useState(null);
   const [border, setBorder] = useState(false);
+  const [selectInput, setSelectInput] = useState("");
+  const [isVisible, setIsVisible] = useState(false);
+  const [degrees, setDegress] = useState({});
+
   const navigate = useNavigate();
   const regexGeorgian = /^[\u10A0-\u10FF]+$/;
   const regexEmail = /^([A-Za-z0-9_\-\.])+\@([redberry])+\.(ge)$/;
   const regexMobile = /^(\+995)(79\d{7}|5\d{8})$/;
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const getData = async () => {
+    const response = await fetch(
+      "https://resume.redberryinternship.ge/api/degrees"
+    );
+    const data = await response.json();
+    setDegress(data);
+  };
 
   const {
     value: enteredName,
@@ -181,6 +197,15 @@ export const CVContextProvider = (props) => {
     });
   };
 
+  const selectHandler = () => {
+    setIsVisible((prev) => !prev);
+  };
+
+  const onOptionClicked = (value) => () => {
+    setSelectInput(value);
+    setIsVisible(false);
+  };
+
   return (
     <cvContext.Provider
       value={{
@@ -192,6 +217,7 @@ export const CVContextProvider = (props) => {
           enteredEmail,
           enteredMobile,
           experience,
+          selectInput,
         },
         cvIsValid: {
           nameIsValid,
@@ -207,9 +233,13 @@ export const CVContextProvider = (props) => {
           emailChangeHandler,
           mobileChangeHandler,
           expHandler,
+          selectHandler,
         },
         border,
         addExp,
+        degrees,
+        onOptionClicked,
+        isVisible,
         submitHandlerPersonal,
         submitHandlerExp,
         submitArrExp,

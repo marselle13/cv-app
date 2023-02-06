@@ -14,7 +14,7 @@ const PersonalForm = () => {
   const { cvIsValid } = ctx;
 
   return (
-    <form className={classes.personal} onSubmit={ctx.submitHandler}>
+    <form className={classes.personal} onSubmit={ctx.submitHandlerPersonal}>
       <div className={classes.formgrid}>
         <Input
           label="სახელი"
@@ -61,7 +61,7 @@ const PersonalForm = () => {
           />
         </div>
       </div>
-      <NextPageButton onClick={ctx.submitHandlerPersonal} />
+      <NextPageButton />
     </form>
   );
 };

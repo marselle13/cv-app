@@ -1,0 +1,12 @@
+.buttonContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 20%;
+  margin-top: 8px;
+}
+
+.backNextDiv {
+  display: flex;
+  justify-content: space-between;
+}

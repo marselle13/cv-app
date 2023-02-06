@@ -9,8 +9,6 @@ const ExpCV = () => {
     (item) => item === true || item === false
   );
 
-  console.log(cvData.experience);
-
   return (
     <div className={classes.expDiv}>
       {show.length !== 0 && <h4>გამოცდილება</h4>}

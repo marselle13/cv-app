@@ -16,16 +16,3 @@
   grid-template-columns: repeat(2, auto);
   column-gap: 60px;
 }
-
-.buttonContainer {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 20%;
-  margin-top: 8px;
-}
-
-.experience .backNextDiv {
-  display: flex;
-  justify-content: space-between;
-}

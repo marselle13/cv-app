@@ -1,0 +1,28 @@
+.dateDiv label {
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 21px;
+  color: #000000;
+}
+
+.dateDiv input {
+  font-family: "helvetic", sans-serif;
+  width: 100%;
+  padding: 15px;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 21px;
+  color: rgba(0, 0, 0, 0.6);
+  border: 1px solid #bcbcbc !important;
+  border-radius: 4px;
+  margin: 0.5rem 0;
+}
+
+.dateDiv input:focus {
+  outline: none;
+}
+
+.dateDiv .passBorder {
+  outline: 1px solid #98e37e !important;
+  color: #000;
+}

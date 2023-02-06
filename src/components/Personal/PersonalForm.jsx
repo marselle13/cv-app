@@ -5,29 +5,16 @@ import InputArea from "../UI/FormCard/Inputs/InputArea";
 import { useContext } from "react";
 import cvContext from "../Store/cvContext";
 import NextPageButton from "../UI/FormCard/Buttons/NextPageButton";
-import { useNavigate } from "react-router-dom";
 
 const PersonalForm = () => {
   const ctx = useContext(cvContext);
-  const navigate = useNavigate();
+
   const { cvChangeHandler } = ctx;
   const { cvData } = ctx;
   const { cvIsValid } = ctx;
-  const checkValidation =
-    cvIsValid.nameIsValid &&
-    cvIsValid.lastnameIsValid &&
-    cvIsValid.emailIsValid &&
-    cvIsValid.mobileIsValid &&
-    cvData.enteredImage;
 
-  const submitHandler = (e) => {
-    e.preventDefault();
-    if (checkValidation) {
-      navigate("/experience");
-    }
-  };
   return (
-    <form className={classes.personal} onSubmit={submitHandler}>
+    <form className={classes.personal} onSubmit={ctx.submitHandlerPersonal}>
       <div className={classes.formgrid}>
         <Input
           label="სახელი"
@@ -49,9 +36,11 @@ const PersonalForm = () => {
       <div>
         <InputUpload onChange={cvChangeHandler.uploadChangeHandler} />
         <InputArea
-          rows="5"
+          rows="4"
+          label="ჩემ შესახებ (არასავალდებულო)"
           onChange={cvChangeHandler.bioChangeHandler}
           value={cvData.enteredBio}
+          placeholder="ზოგადი ინფო შენ შესახებ"
         />
         <Input
           label="ელ.ფოსტა"

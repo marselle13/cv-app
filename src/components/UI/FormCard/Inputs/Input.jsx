@@ -4,7 +4,7 @@ import errorIcon from "../../../../assets/error-icon.png";
 
 const Input = (props) => {
   return (
-    <div className={classes.formDiv}>
+    <div className={classes.formDiv} style={props.style}>
       <label
         htmlFor=""
         className={`${
@@ -22,6 +22,7 @@ const Input = (props) => {
             !props.isValid && props.value.length !== 0 && classes.errorBorder
           }`}
           placeholder={props.placeholder}
+          name={props.name}
         />
         {props.isValid && (
           <img src={passIcon} alt="pass" className={classes.pass} />

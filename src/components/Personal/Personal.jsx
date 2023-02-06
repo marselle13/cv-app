@@ -8,6 +8,7 @@ const Personal = () => {
       <div style={{ display: "flex" }}>
         <FormCard label="პირადი ინფო" number="1">
           <PersonalForm />
+          
         </FormCard>
         <CV />
       </div>

@@ -3,12 +3,14 @@ import classes from "./InputArea.module.css";
 const InputArea = (props) => {
   return (
     <div className={classes.areaDiv}>
-      <label htmlFor="">ჩემ შესახებ (არასავალდებულო)</label>
+      <label>{props.label}</label>
       <textarea
-        placeholder="ზოგადი ინფო შენ შესახებ"
+        props={props.name}
+        placeholder={props.placeholder}
         rows={props.rows}
         onChange={props.onChange}
         value={props.value}
+        className={`${props.isValid && classes.passBorder}`}
       />
     </div>
   );

@@ -10,7 +10,7 @@ const ExperienceForm = () => {
   return (
     <form className={classes.experience} onSubmit={ctx.submitHandlerExp}>
       <ExperienceFormInputs />
-      <ButtonContainer back="/personal" />
+      <ButtonContainer back="/personal" add={ctx.addExp}/>
     </form>
   );
 };

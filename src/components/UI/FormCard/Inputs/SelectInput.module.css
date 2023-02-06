@@ -27,6 +27,13 @@
   cursor: pointer;
   margin-top: 0.5rem;
 }
+
+.passText {
+  color: #000 !important;
+}
+.passBorder {
+  outline: 1px solid #98e37e !important;
+}
 .selectContainer span {
   font-weight: 400;
   font-size: 16px;

@@ -8,7 +8,6 @@ import NextPageButton from "../UI/FormCard/Buttons/NextPageButton";
 
 const PersonalForm = () => {
   const ctx = useContext(cvContext);
-
   const { cvChangeHandler } = ctx;
   const { cvData } = ctx;
   const { cvIsValid } = ctx;

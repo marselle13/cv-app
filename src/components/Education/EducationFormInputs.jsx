@@ -12,24 +12,40 @@ const EducationFormInputs = () => {
 
   return (
     <Fragment>
-      {cvData.experience.map((form, index) => (
+      {cvData.education.map((form, index) => (
         <div className={classes.educationFormDiv} key={index}>
           <Input
-            name="school"
             label="სასწავლებელი"
             valid="მინიმუმ 2 სიმბოლო"
             onChange={(event) =>
-              (cvChangeHandler.expHandler = (0, "position", event.target.value))
+              cvChangeHandler.eduHandler(index, "school", event.target.value)
             }
-            value={form.position}
-            isValid={form.isValid.position}
+            value={form.school}
+            isValid={form.isValid.school}
             placeholder="სასწავლებელი"
           />
           <div className={classes.formgrid}>
-            <SelectInput />
-            <InputDate label="დამთავრების რიცხვი" />
+            <SelectInput index={index} isValid={form.isValid.degrees} />
+            <InputDate
+              label="დამთავრების რიცხვი"
+              isValid={form.isValid.endDate}
+              onChange={(event) =>
+                cvChangeHandler.eduHandler(index, "endDate", event.target.value)
+              }
+            />
           </div>
-          <InputArea label="აღწერა" rows="7" />
+          <InputArea
+            label="აღწერა"
+            rows="7"
+            isValid={form.isValid.description}
+            onChange={(event) =>
+              cvChangeHandler.eduHandler(
+                index,
+                "description",
+                event.target.value
+              )
+            }
+          />
         </div>
       ))}
     </Fragment>

@@ -12,80 +12,13 @@ const cvContext = React.createContext({
 });
 
 export const CVContextProvider = (props) => {
-  const [enteredBio, setEnteredBio] = useState("");
-  const [enteredImage, setEnteredImage] = useState(null);
-  const [border, setBorder] = useState(false);
-  const [selectInput, setSelectInput] = useState("");
-  const [isVisible, setIsVisible] = useState(false);
-  const [degrees, setDegress] = useState({});
-
   const navigate = useNavigate();
-  const regexGeorgian = /^[\u10A0-\u10FF]+$/;
-  const regexEmail = /^([A-Za-z0-9_\-\.])+\@([redberry])+\.(ge)$/;
-  const regexMobile = /^(\+995)(79\d{7}|5\d{8})$/;
-
-  useEffect(() => {
-    getData();
-  }, []);
-
-  const getData = async () => {
-    const response = await fetch(
-      "https://resume.redberryinternship.ge/api/degrees"
-    );
-    const data = await response.json();
-    setDegress(data);
-  };
-
-  const {
-    value: enteredName,
-    isValid: nameIsValid,
-    valueChangeHandler: nameChangeHandler,
-  } = useInput(
-    (value) => regexGeorgian.test(value.trim()) && value.trim().length > 1
+  const [enteredBio, setEnteredBio] = useState("");
+  const [enteredImage, setEnteredImage] = useState(
+    localStorage.getItem("image") || ""
   );
-
-  const bioChangeHandler = (e) => {
-    setEnteredBio(e.target.value);
-  };
-
-  const {
-    value: enteredLastname,
-    isValid: lastnameIsValid,
-    valueChangeHandler: lastnameChangeHandler,
-  } = useInput(
-    (value) => regexGeorgian.test(value.trim()) && value.trim().length > 1
-  );
-  const uploadChangeHandler = (e) => {
-    const uploadImage = e.target.files[0];
-    setEnteredImage(URL.createObjectURL(uploadImage));
-  };
-  const {
-    value: enteredEmail,
-    isValid: emailIsValid,
-    valueChangeHandler: emailChangeHandler,
-  } = useInput((value) => regexEmail.test(value.trim()));
-
-  const {
-    value: enteredMobile,
-    isValid: mobileIsValid,
-    valueChangeHandler: mobileChangeHandler,
-  } = useInput((value) => regexMobile.test(value.trim()));
-
-  const checkValidationPersonal =
-    nameIsValid &&
-    lastnameIsValid &&
-    emailIsValid &&
-    mobileIsValid &&
-    enteredImage;
-
-  const submitHandlerPersonal = (e) => {
-    e.preventDefault();
-    if (checkValidationPersonal) {
-      navigate("/experience");
-      setBorder(true);
-    }
-  };
-
+  const [border, setBorder] = useState(false);
+  const [addExpSize, setAddExpSize] = useState(false);
   const [experience, setExperience] = useState([
     {
       position: "",
@@ -102,6 +35,106 @@ export const CVContextProvider = (props) => {
       },
     },
   ]);
+  const [degrees, setDegress] = useState({});
+  const [education, setEducation] = useState([
+    {
+      school: "",
+      select: {
+        degrees: "",
+        isSelected: false,
+      },
+      endDate: "",
+      description: "",
+      isValid: {
+        school: false,
+        degrees: false,
+        endDate: false,
+        description: false,
+      },
+    },
+  ]);
+
+  const regexGeorgian = /^[\u10A0-\u10FF]+$/;
+  const regexEmail = /^[a-zA-Z0-9._%+-]+@redberry\.ge$/;
+  const regexMobile = /^(\+995)(79\d{7}|5\d{8})$/;
+
+  useEffect(() => {
+    getData();
+  }, []);
+  useEffect(() => {
+    localStorage.setItem("image", enteredImage);
+
+    return () => {
+      URL.revokeObjectURL(enteredImage);
+    };
+  }, [enteredImage]);
+
+  const getData = async () => {
+    const response = await fetch(
+      "https://resume.redberryinternship.ge/api/degrees"
+    );
+    const data = await response.json();
+    setDegress(data);
+  };
+
+  const {
+    value: enteredName,
+    isValid: nameIsValid,
+    valueChangeHandler: nameChangeHandler,
+  } = useInput(
+    "firstName",
+    "",
+    (value) => regexGeorgian.test(value.trim()) && value.trim().length > 1
+  );
+
+  const bioChangeHandler = (e) => {
+    setEnteredBio(e.target.value);
+  };
+
+  const {
+    value: enteredLastname,
+    isValid: lastnameIsValid,
+    valueChangeHandler: lastnameChangeHandler,
+  } = useInput(
+    "lastName",
+    "",
+    (value) => regexGeorgian.test(value.trim()) && value.trim().length > 1
+  );
+  const uploadChangeHandler = (e) => {
+    const image = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = () => {
+      setEnteredImage(URL.createObjectURL(image));
+    };
+    reader.readAsDataURL(image);
+  };
+
+  const {
+    value: enteredEmail,
+    isValid: emailIsValid,
+    valueChangeHandler: emailChangeHandler,
+  } = useInput("email", "", (value) => regexEmail.test(value.trim()));
+
+  const {
+    value: enteredMobile,
+    isValid: mobileIsValid,
+    valueChangeHandler: mobileChangeHandler,
+  } = useInput("mobile", "", (value) => regexMobile.test(value.trim()));
+
+  const checkValidationPersonal =
+    nameIsValid &&
+    lastnameIsValid &&
+    emailIsValid &&
+    mobileIsValid &&
+    enteredImage;
+
+  const submitHandlerPersonal = (e) => {
+    e.preventDefault();
+    if (checkValidationPersonal) {
+      navigate("/experience");
+      setBorder(true);
+    }
+  };
 
   const expHandler = (index, field, value) => {
     const updateForms = [...experience];
@@ -137,9 +170,11 @@ export const CVContextProvider = (props) => {
         },
       },
     ]);
+    setAddExpSize(true);
   };
 
   const submitArrExp = experience.map((exp, index) => {
+    let checkInputs = [];
     const submitIsValidExp =
       experience[index].isValid.position &&
       experience[index].isValid.employer &&
@@ -149,28 +184,68 @@ export const CVContextProvider = (props) => {
 
     const { position, employer, startDate, endDate, description } = exp;
     if (position || employer || startDate || endDate || description) {
-      return submitIsValidExp;
+      checkInputs = submitIsValidExp;
     }
+    return checkInputs;
   });
 
   const submitHandlerExp = (e) => {
     e.preventDefault();
     const trueArr = submitArrExp.filter((item) => item === true);
     const falseArr = submitArrExp.filter((item) => item === false);
-    submitArrExp.forEach((item) => {
-      if (trueArr.length > 0 && falseArr.length === 0) {
-        navigate("/education");
-      }
-    });
+
+    if (trueArr.length > 0 && falseArr.length === 0) {
+      navigate("/education");
+    }
   };
 
-  const selectHandler = () => {
-    setIsVisible((prev) => !prev);
+  const eduHandler = (index, field, value) => {
+    const updateFormsEdu = [...education];
+    updateFormsEdu[index][field] = value;
+    updateFormsEdu[index].isValid = isValidEdu(education[index]);
+    setEducation(updateFormsEdu);
   };
 
-  const onOptionClicked = (value) => () => {
-    setSelectInput(value);
-    setIsVisible(false);
+  const selectHandler = (index) => {
+    const updateSelect = [...education];
+    updateSelect[index].select.isSelected =
+      !updateSelect[index].select.isSelected;
+    setEducation(updateSelect);
+  };
+
+  const onOptionClicked = (value, index) => () => {
+    const updateSelect = [...education];
+    updateSelect[index].select.degrees = value;
+    setEducation(updateSelect);
+    updateSelect[index].select.isSelected =
+      !updateSelect[index].select.isSelected;
+  };
+
+  const isValidEdu = (form) => ({
+    school: form.school.trim().length > 1,
+    endDate: form.endDate.length !== 0,
+    description: form.description.length !== 0,
+  });
+
+  const addEdu = (e) => {
+    e.preventDefault();
+    setEducation([
+      ...education,
+      {
+        school: "",
+        select: {
+          degrees: "",
+          isSelected: false,
+        },
+        endDate: "",
+        description: "",
+        isValid: {
+          school: false,
+          endDate: false,
+          description: false,
+        },
+      },
+    ]);
   };
 
   return (
@@ -184,7 +259,7 @@ export const CVContextProvider = (props) => {
           enteredEmail,
           enteredMobile,
           experience,
-          selectInput,
+          education,
         },
         cvIsValid: {
           nameIsValid,
@@ -200,13 +275,15 @@ export const CVContextProvider = (props) => {
           emailChangeHandler,
           mobileChangeHandler,
           expHandler,
+          eduHandler,
           selectHandler,
         },
         border,
         addExp,
+        addExpSize,
+        addEdu,
         degrees,
         onOptionClicked,
-        isVisible,
         submitHandlerPersonal,
         submitHandlerExp,
         submitArrExp,

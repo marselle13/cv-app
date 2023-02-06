@@ -1,17 +1,16 @@
 import { useState } from "react";
 
-const useInput = (validateValue) => {
-  const [enteredValue, setEnteredValue] = useState("");
+const useInput = (key, initialValue, validateValue) => {
+  const [enteredValue, setEnteredValue] = useState(
+    localStorage.getItem(key) || initialValue
+  );
 
-  const [isValid, setIsValid] = useState(false);
+  const [isValid, setIsValid] = useState(validateValue(enteredValue));
 
   const valueChangeHandler = (e) => {
     setEnteredValue(e.target.value);
-    if (validateValue(e.target.value)) {
-      setIsValid(true);
-    } else {
-      setIsValid(false);
-    }
+    localStorage.setItem(key, e.target.value);
+    setIsValid(validateValue(e.target.value));
   };
 
   return {

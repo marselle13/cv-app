@@ -8,6 +8,7 @@ const EduCV = () => {
   const show = ctx.submitArrEdu.filter(
     (item) => item === true || item === false || item === ""
   );
+  console.log(ctx.isSubmit);
 
   return (
     <div className={classes.eduDiv}>
@@ -25,6 +26,7 @@ const EduCV = () => {
             key={index}
             check1={eduCheck}
             check2={ctx.addEduSize}
+            check3={ctx.isSubmit}
             info1={edu.school}
             info2={edu.select.degrees}
             date1={edu.endDate}

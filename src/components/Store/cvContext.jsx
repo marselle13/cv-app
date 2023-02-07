@@ -11,6 +11,10 @@ const cvContext = React.createContext({
 });
 
 export const CVContextProvider = (props) => {
+  const [degrees, setDegress] = useState({});
+  const [isSubmit, setIsSubmit] = useState(
+    localStorage.getItem("submit") || ""
+  );
   const navigate = useNavigate();
   const [enteredBio, setEnteredBio] = useState(
     localStorage.getItem("bio") || ""
@@ -41,7 +45,6 @@ export const CVContextProvider = (props) => {
       },
     },
   ]);
-  const [degrees, setDegress] = useState({});
   const [education, setEducation] = useState([
     {
       school: "",
@@ -87,7 +90,8 @@ export const CVContextProvider = (props) => {
     localStorage.setItem("border", border);
     localStorage.setItem("expSize", addExpSize);
     localStorage.setItem("eduSize", addEduSize);
-  }, [border, addExpSize, addEduSize]);
+    localStorage.setItem("submit", isSubmit);
+  }, [border, addExpSize, addEduSize, isSubmit]);
 
   const getData = async () => {
     const response = await fetch(
@@ -294,6 +298,7 @@ export const CVContextProvider = (props) => {
 
     if (trueArr.length > 0 && falseArr.length === 0 && emptyArr.length === 0) {
       navigate("/cv");
+      setIsSubmit("true");
     }
   };
 
@@ -334,6 +339,7 @@ export const CVContextProvider = (props) => {
         addEduSize,
         degrees,
         onOptionClicked,
+        isSubmit,
         submitHandlerPersonal,
         submitHandlerExp,
         submitHandlerEdu,

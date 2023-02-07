@@ -4,7 +4,8 @@ const CVCard = (props) => {
   return (
     <div
       className={`${!props.check1 && classes.hidden} ${
-        props.check1 && props.check2 && classes.borderBottom
+        (props.check1 && props.check2 !== "false") ||
+        (props.check3 === "true" && classes.borderBottom)
       }`}
       key={props.index}
     >

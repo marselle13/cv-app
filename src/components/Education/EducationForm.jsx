@@ -7,7 +7,11 @@ import EducationFormInputs from "./EducationFormInputs";
 const EducationForm = () => {
   const ctx = useContext(cvContext);
   return (
-    <form className={classes.education}>
+    <form
+      className={classes.education}
+      style={{ paddingBottom: ctx.addEduSize && "65px" }}
+      onSubmit={ctx.submitHandlerEdu}
+    >
       <EducationFormInputs />
       <ButtonContainer
         back="/experience"

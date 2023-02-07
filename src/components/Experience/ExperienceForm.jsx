@@ -7,8 +7,6 @@ import classes from "./ExperienceFormInputs.module.css";
 const ExperienceForm = () => {
   const ctx = useContext(cvContext);
 
-
-
   return (
     <form
       className={classes.experience}

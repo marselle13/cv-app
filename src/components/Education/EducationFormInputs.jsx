@@ -29,6 +29,7 @@ const EducationFormInputs = () => {
             <InputDate
               label="დამთავრების რიცხვი"
               isValid={form.isValid.endDate}
+              value={form.endDate}
               onChange={(event) =>
                 cvChangeHandler.eduHandler(index, "endDate", event.target.value)
               }
@@ -38,6 +39,7 @@ const EducationFormInputs = () => {
             label="აღწერა"
             rows="7"
             isValid={form.isValid.description}
+            value={form.description}
             onChange={(event) =>
               cvChangeHandler.eduHandler(
                 index,

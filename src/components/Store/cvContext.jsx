@@ -3,7 +3,6 @@ import useInput from "../hooks/use-input";
 import { useNavigate } from "react-router-dom";
 
 const cvContext = React.createContext({
-  border: false,
   cvData: {},
   cvIsValid: {},
   cvChangeHandler: {},
@@ -13,12 +12,19 @@ const cvContext = React.createContext({
 
 export const CVContextProvider = (props) => {
   const navigate = useNavigate();
-  const [enteredBio, setEnteredBio] = useState("");
+  const [enteredBio, setEnteredBio] = useState(
+    localStorage.getItem("bio") || ""
+  );
   const [enteredImage, setEnteredImage] = useState(
     localStorage.getItem("image") || ""
   );
-  const [border, setBorder] = useState(false);
-  const [addExpSize, setAddExpSize] = useState(false);
+  const [border, setBorder] = useState(localStorage.getItem("border") || "");
+  const [addExpSize, setAddExpSize] = useState(
+    localStorage.getItem("expSize") || false
+  );
+  const [addEduSize, setAddEduSize] = useState(
+    localStorage.getItem("eduSize") || false
+  );
   const [experience, setExperience] = useState([
     {
       position: "",
@@ -53,21 +59,35 @@ export const CVContextProvider = (props) => {
       },
     },
   ]);
-
   const regexGeorgian = /^[\u10A0-\u10FF]+$/;
   const regexEmail = /^[a-zA-Z0-9._%+-]+@redberry\.ge$/;
   const regexMobile = /^(\+995)(79\d{7}|5\d{8})$/;
 
   useEffect(() => {
-    getData();
-  }, []);
-  useEffect(() => {
     localStorage.setItem("image", enteredImage);
-
     return () => {
       URL.revokeObjectURL(enteredImage);
     };
   }, [enteredImage]);
+
+  useEffect(() => {
+    const savedExperience = localStorage.getItem("experience");
+    if (savedExperience) {
+      const parsedExperience = JSON.parse(savedExperience);
+      setExperience(parsedExperience);
+    }
+    const savedEducation = JSON.parse(localStorage.getItem("education"));
+    if (savedEducation) {
+      setEducation(savedEducation);
+    }
+    getData();
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("border", border);
+    localStorage.setItem("expSize", addExpSize);
+    localStorage.setItem("eduSize", addEduSize);
+  }, [border, addExpSize, addEduSize]);
 
   const getData = async () => {
     const response = await fetch(
@@ -89,6 +109,7 @@ export const CVContextProvider = (props) => {
 
   const bioChangeHandler = (e) => {
     setEnteredBio(e.target.value);
+    localStorage.setItem("bio", enteredBio);
   };
 
   const {
@@ -132,7 +153,7 @@ export const CVContextProvider = (props) => {
     e.preventDefault();
     if (checkValidationPersonal) {
       navigate("/experience");
-      setBorder(true);
+      setBorder("done");
     }
   };
 
@@ -141,6 +162,7 @@ export const CVContextProvider = (props) => {
     updateForms[index][field] = value;
     updateForms[index].isValid = isValidExp(experience[index]);
     setExperience(updateForms);
+    localStorage.setItem("experience", JSON.stringify(experience));
   };
 
   const isValidExp = (form) => ({
@@ -204,6 +226,7 @@ export const CVContextProvider = (props) => {
     updateFormsEdu[index][field] = value;
     updateFormsEdu[index].isValid = isValidEdu(education[index]);
     setEducation(updateFormsEdu);
+    localStorage.setItem("education", JSON.stringify(education));
   };
 
   const selectHandler = (index) => {
@@ -246,6 +269,32 @@ export const CVContextProvider = (props) => {
         },
       },
     ]);
+    setAddEduSize(true);
+  };
+
+  const submitArrEdu = education.map((edu, index) => {
+    let eduUpdate = [];
+    const submitIsValidEdu =
+      education[index].isValid.school &&
+      education[index].select.degrees &&
+      education[index].isValid.endDate &&
+      education[index].isValid.description;
+    const { school, select, endDate, description } = edu;
+    if (school || select.degrees || endDate || description) {
+      eduUpdate = submitIsValidEdu;
+    }
+    return eduUpdate;
+  });
+
+  const submitHandlerEdu = (e) => {
+    e.preventDefault();
+    const trueArr = submitArrEdu.filter((item) => item === true);
+    const falseArr = submitArrEdu.filter((item) => item === false);
+    const emptyArr = submitArrEdu.filter((item) => item === "");
+
+    if (trueArr.length > 0 && falseArr.length === 0 && emptyArr.length === 0) {
+      navigate("/cv");
+    }
   };
 
   return (
@@ -282,10 +331,12 @@ export const CVContextProvider = (props) => {
         addExp,
         addExpSize,
         addEdu,
+        addEduSize,
         degrees,
         onOptionClicked,
         submitHandlerPersonal,
         submitHandlerExp,
+        submitHandlerEdu,
         submitArrExp,
       }}
     >

@@ -12,7 +12,7 @@ const ButtonContainer = (props) => {
         <Link to={props.back}>
           <BackPageButton />
         </Link>
-        <NextPageButton />
+        <NextPageButton onClick={props.onClick} />
       </div>
     </div>
   );

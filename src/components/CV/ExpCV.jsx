@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import cvContext from "../Store/cvContext";
+import CVCard from "../UI/CVcard/CVCard";
 import classes from "./ExpCV.module.css";
 
 const ExpCV = () => {
@@ -22,24 +23,16 @@ const ExpCV = () => {
           cvData.experience[index].description;
 
         return (
-          <div
-            className={expCheck ? classes.borderBottom : classes.hidden}
+          <CVCard
             key={index}
-          >
-            <div className={classes.workDiv}>
-              <p> {exp.position}</p>
-              {exp.position && exp.employer && `,`}
-              <p>&nbsp;{exp.employer}</p>
-            </div>
-            <div className={classes.dateDiv}>
-              <em> {exp.startDate}</em>
-              {exp.startDate && " - "}
-              <em>{exp.endDate}</em>
-            </div>
-            <div>
-              <p>{exp.description}</p>
-            </div>
-          </div>
+            check1={expCheck}
+            check2={ctx.addExpSize}
+            info1={exp.position}
+            info2={exp.employer}
+            date1={exp.startDate}
+            date2={exp.endDate}
+            description={exp.description}
+          />
         );
       })}
     </div>

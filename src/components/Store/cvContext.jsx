@@ -338,6 +338,7 @@ export const CVContextProvider = (props) => {
         submitHandlerExp,
         submitHandlerEdu,
         submitArrExp,
+        submitArrEdu,
       }}
     >
       {props.children}

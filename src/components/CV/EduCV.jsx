@@ -8,7 +8,6 @@ const EduCV = () => {
   const show = ctx.submitArrEdu.filter(
     (item) => item === true || item === false || item === ""
   );
-  console.log(ctx.isSubmit);
 
   return (
     <div className={classes.eduDiv}>

@@ -1,11 +1,14 @@
 import classes from "./CVCard.module.css";
 
 const CVCard = (props) => {
+  const checkChange = props.check2 === "true" || props.check2 === true;
+  const checkSubmit = props.check3 === "true" || props.check3 === true;
+
   return (
     <div
       className={`${!props.check1 && classes.hidden} ${
-        (props.check1 && props.check2 !== "false") ||
-        (props.check3 === "true" && classes.borderBottom)
+        (props.check1 && checkChange && classes.borderBottom) ||
+        (checkSubmit && classes.borderBottom)
       }`}
       key={props.index}
     >

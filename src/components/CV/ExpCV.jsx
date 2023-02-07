@@ -9,6 +9,7 @@ const ExpCV = () => {
   const show = ctx.submitArrExp.filter(
     (item) => item === true || item === false
   );
+  console.log(ctx.addExpSize);
 
   return (
     <div className={classes.expDiv}>
@@ -16,17 +17,18 @@ const ExpCV = () => {
 
       {cvData.experience.map((exp, index) => {
         const expCheck =
-          cvData.experience[index].position ||
-          cvData.experience[index].employer ||
-          cvData.experience[index].startDate ||
-          cvData.experience[index].endDate ||
-          cvData.experience[index].description;
+          exp.position ||
+          exp.employer ||
+          exp.startDate ||
+          exp.endDate ||
+          exp.description;
 
         return (
           <CVCard
             key={index}
             check1={expCheck}
             check2={ctx.addExpSize}
+            check3={ctx.isSubmitExp}
             info1={exp.position}
             info2={exp.employer}
             date1={exp.startDate}

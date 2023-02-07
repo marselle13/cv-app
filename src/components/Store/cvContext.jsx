@@ -15,6 +15,9 @@ export const CVContextProvider = (props) => {
   const [isSubmit, setIsSubmit] = useState(
     localStorage.getItem("submit") || ""
   );
+  const [isSubmitExp, setIsSubmitExp] = useState(
+    localStorage.getItem("submitExp") || ""
+  );
   const navigate = useNavigate();
   const [enteredBio, setEnteredBio] = useState(
     localStorage.getItem("bio") || ""
@@ -91,7 +94,8 @@ export const CVContextProvider = (props) => {
     localStorage.setItem("expSize", addExpSize);
     localStorage.setItem("eduSize", addEduSize);
     localStorage.setItem("submit", isSubmit);
-  }, [border, addExpSize, addEduSize, isSubmit]);
+    localStorage.setItem("submitExp", isSubmitExp);
+  }, [border, addExpSize, addEduSize, isSubmit, isSubmitExp]);
 
   const getData = async () => {
     const response = await fetch(
@@ -222,6 +226,7 @@ export const CVContextProvider = (props) => {
 
     if (trueArr.length > 0 && falseArr.length === 0) {
       navigate("/education");
+      setIsSubmitExp("true");
     }
   };
 
@@ -340,6 +345,7 @@ export const CVContextProvider = (props) => {
         degrees,
         onOptionClicked,
         isSubmit,
+        isSubmitExp,
         submitHandlerPersonal,
         submitHandlerExp,
         submitHandlerEdu,

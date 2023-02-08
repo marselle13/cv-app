@@ -5,11 +5,10 @@ import cvContext from "../Store/cvContext";
 import InputDate from "../UI/FormCard/Inputs/InputDate";
 import InputArea from "../UI/FormCard/Inputs/InputArea";
 
-const ExperienceFormInputs = (props) => {
+const ExperienceFormInputs = () => {
   const ctx = useContext(cvContext);
   const { cvChangeHandler } = ctx;
   const { cvData } = ctx;
-
   return (
     <Fragment>
       {cvData.experience.map((form, index) => (

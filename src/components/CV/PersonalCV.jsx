@@ -7,6 +7,7 @@ import mobile from "../../assets/mobile.png";
 const PersonalCV = () => {
   const ctx = useContext(cvContext);
   const { cvData } = ctx;
+  const { personal } = cvData;
 
   return (
     <div
@@ -14,29 +15,29 @@ const PersonalCV = () => {
       style={{ borderBottom: ctx.border && "1px solid  #C8C8C8" }}
     >
       <div>
-        {(cvData.enteredName || cvData.enteredLastname) && (
+        {(personal.name || personal.surname) && (
           <div className={classes.nameDiv}>
             <h2>
-              {cvData.enteredName} {cvData.enteredLastname}
+              {personal.name} {personal.surname}
             </h2>
           </div>
         )}
-        {cvData.enteredEmail && (
+        {personal.email && (
           <div className={classes.contactDiv}>
             <img src={email} alt="email" />
-            <p>{cvData.enteredEmail}</p>
+            <p>{personal.email}</p>
           </div>
         )}
-        {cvData.enteredMobile && (
+        {personal.mobile && (
           <div className={classes.contactDiv}>
             <img src={mobile} alt="mobile" />
-            <p>{cvData.enteredMobile}</p>
+            <p>{personal.mobile}</p>
           </div>
         )}
-        {cvData.enteredBio && (
+        {personal.bio && (
           <div className={classes.bioDiv}>
             <label>ჩემ შესახებ</label>
-            <p>{cvData.enteredBio}</p>
+            <p>{personal.bio}</p>
           </div>
         )}
       </div>

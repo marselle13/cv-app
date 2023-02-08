@@ -1,7 +1,6 @@
 import FormCard from "../UI/FormCard/FormCard";
 import CV from "../CV/CV";
 import EducationForm from "./EducationForm";
-import ButtonContainer from "../UI/FormCard/ButtonContainer";
 
 const Education = () => {
   return (

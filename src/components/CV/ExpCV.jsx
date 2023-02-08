@@ -9,7 +9,6 @@ const ExpCV = () => {
   const show = ctx.submitArrExp.filter(
     (item) => item === true || item === false
   );
-  console.log(ctx.addExpSize);
 
   return (
     <div className={classes.expDiv}>

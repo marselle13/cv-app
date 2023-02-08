@@ -6,6 +6,21 @@ import EducationFormInputs from "./EducationFormInputs";
 
 const EducationForm = () => {
   const ctx = useContext(cvContext);
+  const education = {
+    school: "",
+    select: {
+      degrees: "",
+      isSelected: false,
+    },
+    endDate: "",
+    description: "",
+    isValid: {
+      school: false,
+      endDate: false,
+      description: false,
+    },
+  };
+
   return (
     <form
       className={classes.education}
@@ -15,7 +30,7 @@ const EducationForm = () => {
       <EducationFormInputs />
       <ButtonContainer
         back="/experience"
-        add={ctx.addEdu}
+        add={(e) => ctx.addEdu(e, education)}
         label="სხვა სასწავლებლის დამატება"
       />
     </form>

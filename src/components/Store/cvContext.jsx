@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
-import useInput from "../hooks/use-input";
 import { useNavigate } from "react-router-dom";
 
 const cvContext = React.createContext({
   cvData: {},
   cvIsValid: {},
   cvChangeHandler: {},
-  submitHandlerPersonal: () => {},
-  addMoreHandler: () => {},
 });
 
 export const CVContextProvider = (props) => {
@@ -19,9 +16,6 @@ export const CVContextProvider = (props) => {
     localStorage.getItem("submitExp") || ""
   );
   const navigate = useNavigate();
-  const [enteredBio, setEnteredBio] = useState(
-    localStorage.getItem("bio") || ""
-  );
   const [enteredImage, setEnteredImage] = useState(
     localStorage.getItem("image") || ""
   );
@@ -32,6 +26,21 @@ export const CVContextProvider = (props) => {
   const [addEduSize, setAddEduSize] = useState(
     localStorage.getItem("eduSize") || false
   );
+  const [personal, setPersonal] = useState({
+    name: "",
+    surname: "",
+    email: "",
+    mobile: "",
+    image: "",
+    bio: "",
+    isValid: {
+      name: false,
+      surname: false,
+      email: false,
+      mobile: false,
+      image: false,
+    },
+  });
   const [experience, setExperience] = useState([
     {
       position: "",
@@ -65,9 +74,6 @@ export const CVContextProvider = (props) => {
       },
     },
   ]);
-  const regexGeorgian = /^[\u10A0-\u10FF]+$/;
-  const regexEmail = /^[a-zA-Z0-9._%+-]+@redberry\.ge$/;
-  const regexMobile = /^(\+995)(79\d{7}|5\d{8})$/;
 
   useEffect(() => {
     localStorage.setItem("image", enteredImage);
@@ -86,6 +92,10 @@ export const CVContextProvider = (props) => {
     if (savedEducation) {
       setEducation(savedEducation);
     }
+    const savedPersonal = JSON.parse(localStorage.getItem("personal"));
+    if (savedPersonal) {
+      setPersonal(savedPersonal);
+    }
     getData();
   }, []);
 
@@ -95,7 +105,8 @@ export const CVContextProvider = (props) => {
     localStorage.setItem("eduSize", addEduSize);
     localStorage.setItem("submit", isSubmit);
     localStorage.setItem("submitExp", isSubmitExp);
-  }, [border, addExpSize, addEduSize, isSubmit, isSubmitExp]);
+    localStorage.setItem("personal", JSON.stringify(personal));
+  }, [border, addExpSize, addEduSize, isSubmit, isSubmitExp, personal]);
 
   const getData = async () => {
     const response = await fetch(
@@ -105,60 +116,15 @@ export const CVContextProvider = (props) => {
     setDegress(data);
   };
 
-  const {
-    value: enteredName,
-    isValid: nameIsValid,
-    valueChangeHandler: nameChangeHandler,
-  } = useInput(
-    "firstName",
-    "",
-    (value) => regexGeorgian.test(value.trim()) && value.trim().length > 1
-  );
-
-  const bioChangeHandler = (e) => {
-    setEnteredBio(e.target.value);
-    localStorage.setItem("bio", enteredBio);
-  };
-
-  const {
-    value: enteredLastname,
-    isValid: lastnameIsValid,
-    valueChangeHandler: lastnameChangeHandler,
-  } = useInput(
-    "lastName",
-    "",
-    (value) => regexGeorgian.test(value.trim()) && value.trim().length > 1
-  );
-  const uploadChangeHandler = (e) => {
-    const image = e.target.files[0];
-    const reader = new FileReader();
-    reader.onload = () => {
-      setEnteredImage(URL.createObjectURL(image));
-    };
-    reader.readAsDataURL(image);
-  };
-
-  const {
-    value: enteredEmail,
-    isValid: emailIsValid,
-    valueChangeHandler: emailChangeHandler,
-  } = useInput("email", "", (value) => regexEmail.test(value.trim()));
-
-  const {
-    value: enteredMobile,
-    isValid: mobileIsValid,
-    valueChangeHandler: mobileChangeHandler,
-  } = useInput("mobile", "", (value) => regexMobile.test(value.trim()));
-
   const checkValidationPersonal =
-    nameIsValid &&
-    lastnameIsValid &&
-    emailIsValid &&
-    mobileIsValid &&
-    enteredImage;
+    personal.isValid.name &&
+    personal.isValid.surname &&
+    personal.isValid.email &&
+    personal.isValid.mobile;
 
   const submitHandlerPersonal = (e) => {
     e.preventDefault();
+    localStorage.setItem("personal", JSON.stringify(personal));
     if (checkValidationPersonal) {
       navigate("/experience");
       setBorder("done");
@@ -181,25 +147,10 @@ export const CVContextProvider = (props) => {
     description: form.description.length !== 0,
   });
 
-  const addExp = (e) => {
+  const addExp = (e, add) => {
     e.preventDefault();
-    setExperience([
-      ...experience,
-      {
-        position: "",
-        employer: "",
-        startDate: "",
-        endDate: "",
-        description: "",
-        isValid: {
-          position: false,
-          employer: false,
-          startDate: false,
-          endDate: false,
-          description: false,
-        },
-      },
-    ]);
+    const updateExp = [...experience, add];
+    setExperience(updateExp);
     setAddExpSize(true);
   };
 
@@ -259,25 +210,10 @@ export const CVContextProvider = (props) => {
     description: form.description.length !== 0,
   });
 
-  const addEdu = (e) => {
+  const addEdu = (e, add) => {
     e.preventDefault();
-    setEducation([
-      ...education,
-      {
-        school: "",
-        select: {
-          degrees: "",
-          isSelected: false,
-        },
-        endDate: "",
-        description: "",
-        isValid: {
-          school: false,
-          endDate: false,
-          description: false,
-        },
-      },
-    ]);
+    const updateEdu = [...education, add];
+    setEducation(updateEdu);
     setAddEduSize(true);
   };
 
@@ -295,13 +231,44 @@ export const CVContextProvider = (props) => {
     return eduUpdate;
   });
 
-  const submitHandlerEdu = (e) => {
+  const handleSubmit = async () => {
+    const formData = new FormData();
+    for (const [key, value] of Object.entries(personal)) {
+      formData.append(key, value);
+    }
+    try {
+      const response = await fetch(
+        "https://resume.redberryinternship.ge/api/cvs",
+        {
+          method: "POST",
+          headers: {
+            accept: "application/json",
+          },
+          body: formData,
+        }
+      );
+
+      if (!response.ok) {
+        const error = await response.json();
+        console.log(error);
+        throw new Error(error.message);
+      }
+
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const submitHandlerEdu = async (e) => {
     e.preventDefault();
     const trueArr = submitArrEdu.filter((item) => item === true);
     const falseArr = submitArrEdu.filter((item) => item === false);
     const emptyArr = submitArrEdu.filter((item) => item === "");
 
     if (trueArr.length > 0 && falseArr.length === 0 && emptyArr.length === 0) {
+      handleSubmit();
       navigate("/cv");
       setIsSubmit("true");
     }
@@ -311,28 +278,13 @@ export const CVContextProvider = (props) => {
     <cvContext.Provider
       value={{
         cvData: {
-          enteredName,
-          enteredLastname,
-          enteredBio,
-          enteredImage,
-          enteredEmail,
-          enteredMobile,
+          personal,
           experience,
           education,
         },
-        cvIsValid: {
-          nameIsValid,
-          lastnameIsValid,
-          emailIsValid,
-          mobileIsValid,
-        },
+        cvIsValid: {},
         cvChangeHandler: {
-          nameChangeHandler,
-          lastnameChangeHandler,
-          bioChangeHandler,
-          uploadChangeHandler,
-          emailChangeHandler,
-          mobileChangeHandler,
+          setPersonal,
           expHandler,
           eduHandler,
           selectHandler,

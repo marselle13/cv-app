@@ -7,16 +7,17 @@ import EducationFormInputs from "./EducationFormInputs";
 const EducationForm = () => {
   const ctx = useContext(cvContext);
   const education = {
-    school: "",
+    institute: "",
     select: {
+      degree_id: 0,
       degrees: "",
       isSelected: false,
     },
-    endDate: "",
+    due_date: "",
     description: "",
     isValid: {
-      school: false,
-      endDate: false,
+      institute: false,
+      due_date: false,
       description: false,
     },
   };

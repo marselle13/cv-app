@@ -28,10 +28,10 @@ const PersonalCV = () => {
             <p>{personal.email}</p>
           </div>
         )}
-        {personal.mobile && (
+        {personal.phone_number && (
           <div className={classes.contactDiv}>
             <img src={mobile} alt="mobile" />
-            <p>{personal.mobile}</p>
+            <p>{personal.phone_number}</p>
           </div>
         )}
         {personal.bio && (

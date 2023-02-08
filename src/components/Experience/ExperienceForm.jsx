@@ -9,14 +9,14 @@ const ExperienceForm = () => {
   const exp = {
     position: "",
     employer: "",
-    startDate: "",
-    endDate: "",
+    start_date: "",
+    due_date: "",
     description: "",
     isValid: {
       position: false,
       employer: false,
-      startDate: false,
-      endDate: false,
+      start_date: false,
+      due_date: false,
       description: false,
     },
   };

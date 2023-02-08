@@ -15,9 +15,9 @@ const EduCV = () => {
 
       {cvData.education.map((edu, index) => {
         const eduCheck =
-          cvData.education[index].school ||
+          cvData.education[index].institute ||
           cvData.education[index].select.degrees ||
-          cvData.education[index].endDate ||
+          cvData.education[index].due_date ||
           cvData.education[index].description;
 
         return (
@@ -26,9 +26,9 @@ const EduCV = () => {
             check1={eduCheck}
             check2={ctx.addEduSize}
             check3={ctx.isSubmit}
-            info1={edu.school}
+            info1={edu.institute}
             info2={edu.select.degrees}
-            date1={edu.endDate}
+            date1={edu.due_date}
             description={edu.description}
           />
         );

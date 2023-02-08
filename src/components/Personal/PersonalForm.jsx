@@ -85,15 +85,15 @@ const PersonalForm = () => {
             onChange={(e) => {
               setPersonal({
                 ...personal,
-                mobile: e.target.value,
+                phone_number: e.target.value,
                 isValid: {
                   ...personal.isValid,
-                  mobile: regexMobile.test(e.target.value.trim()),
+                  phone_number: regexMobile.test(e.target.value.trim()),
                 },
               });
             }}
-            value={personal.mobile}
-            isValid={personal.isValid.mobile}
+            value={personal.phone_number}
+            isValid={personal.isValid.phone_number}
             placeholder="+995 551 12 34 56"
           />
         </div>

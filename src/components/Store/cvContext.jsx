@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import axios from "axios";
 const cvContext = React.createContext({
   cvData: {},
   cvIsValid: {},
@@ -8,6 +8,7 @@ const cvContext = React.createContext({
 });
 
 export const CVContextProvider = (props) => {
+  const [data, setData] = useState({});
   const [degrees, setDegress] = useState({});
   const [isSubmit, setIsSubmit] = useState(
     localStorage.getItem("submit") || ""
@@ -30,7 +31,7 @@ export const CVContextProvider = (props) => {
     name: "",
     surname: "",
     email: "",
-    mobile: "",
+    phone_number: "",
     image: "",
     bio: "",
     isValid: {
@@ -38,38 +39,39 @@ export const CVContextProvider = (props) => {
       surname: false,
       email: false,
       mobile: false,
-      image: false,
+      phone_number: false,
     },
   });
   const [experience, setExperience] = useState([
     {
       position: "",
       employer: "",
-      startDate: "",
-      endDate: "",
+      start_date: "",
+      due_date: "",
       description: "",
       isValid: {
         position: false,
         employer: false,
-        startDate: false,
-        endDate: false,
+        start_date: false,
+        due_date: false,
         description: false,
       },
     },
   ]);
   const [education, setEducation] = useState([
     {
-      school: "",
+      institute: "",
       select: {
+        degree_id: 0,
         degrees: "",
         isSelected: false,
       },
-      endDate: "",
+      due_date: "",
       description: "",
       isValid: {
-        school: false,
+        institute: false,
         degrees: false,
-        endDate: false,
+        due_date: false,
         description: false,
       },
     },
@@ -83,22 +85,22 @@ export const CVContextProvider = (props) => {
   }, [enteredImage]);
 
   useEffect(() => {
-    const savedExperience = localStorage.getItem("experience");
+    const savedPersonal = JSON.parse(localStorage.getItem("personal"));
+    if (savedPersonal) {
+      setPersonal(savedPersonal);
+    }
+    const savedExperience = JSON.parse(localStorage.getItem("experience"));
     if (savedExperience) {
-      const parsedExperience = JSON.parse(savedExperience);
-      setExperience(parsedExperience);
+      setExperience(savedExperience);
+      setData(savedExperience);
     }
     const savedEducation = JSON.parse(localStorage.getItem("education"));
     if (savedEducation) {
       setEducation(savedEducation);
     }
-    const savedPersonal = JSON.parse(localStorage.getItem("personal"));
-    if (savedPersonal) {
-      setPersonal(savedPersonal);
-    }
     getData();
   }, []);
-
+  console.log(data);
   useEffect(() => {
     localStorage.setItem("border", border);
     localStorage.setItem("expSize", addExpSize);
@@ -120,7 +122,7 @@ export const CVContextProvider = (props) => {
     personal.isValid.name &&
     personal.isValid.surname &&
     personal.isValid.email &&
-    personal.isValid.mobile;
+    personal.isValid.phone_number;
 
   const submitHandlerPersonal = (e) => {
     e.preventDefault();
@@ -130,6 +132,7 @@ export const CVContextProvider = (props) => {
       setBorder("done");
     }
   };
+  console.log(data);
 
   const expHandler = (index, field, value) => {
     const updateForms = [...experience];
@@ -142,8 +145,8 @@ export const CVContextProvider = (props) => {
   const isValidExp = (form) => ({
     position: form.position.trim().length > 1,
     employer: form.employer.trim().length > 1,
-    startDate: form.startDate.length !== 0,
-    endDate: form.endDate.length !== 0,
+    start_date: form.start_date.length !== 0,
+    due_date: form.due_date.length !== 0,
     description: form.description.length !== 0,
   });
 
@@ -159,12 +162,12 @@ export const CVContextProvider = (props) => {
     const submitIsValidExp =
       experience[index].isValid.position &&
       experience[index].isValid.employer &&
-      experience[index].isValid.startDate &&
-      experience[index].isValid.endDate &&
+      experience[index].isValid.start_date &&
+      experience[index].isValid.due_date &&
       experience[index].isValid.description;
 
-    const { position, employer, startDate, endDate, description } = exp;
-    if (position || employer || startDate || endDate || description) {
+    const { position, employer, start_date, due_date, description } = exp;
+    if (position || employer || start_date || due_date || description) {
       checkInputs = submitIsValidExp;
     }
     return checkInputs;
@@ -205,8 +208,8 @@ export const CVContextProvider = (props) => {
   };
 
   const isValidEdu = (form) => ({
-    school: form.school.trim().length > 1,
-    endDate: form.endDate.length !== 0,
+    institute: form.institute.trim().length > 1,
+    due_date: form.due_date.length !== 0,
     description: form.description.length !== 0,
   });
 
@@ -220,45 +223,53 @@ export const CVContextProvider = (props) => {
   const submitArrEdu = education.map((edu, index) => {
     let eduUpdate = [];
     const submitIsValidEdu =
-      education[index].isValid.school &&
+      education[index].isValid.institute &&
       education[index].select.degrees &&
-      education[index].isValid.endDate &&
+      education[index].isValid.due_date &&
       education[index].isValid.description;
-    const { school, select, endDate, description } = edu;
-    if (school || select.degrees || endDate || description) {
+    const { institute, select, due_date, description } = edu;
+    if (institute || select.degrees || due_date || description) {
       eduUpdate = submitIsValidEdu;
     }
     return eduUpdate;
   });
 
+  const [error, setError] = useState(null);
+
   const handleSubmit = async () => {
-    const formData = new FormData();
-    for (const [key, value] of Object.entries(personal)) {
-      formData.append(key, value);
-    }
-    try {
-      const response = await fetch(
-        "https://resume.redberryinternship.ge/api/cvs",
-        {
-          method: "POST",
-          headers: {
-            accept: "application/json",
-          },
-          body: formData,
+    // const formData = new FormData();
+    // const storedPersonal = JSON.parse(localStorage.getItem("personal"));
+    // const storedExperience = JSON.parse(localStorage.getItem("experience"));
+    // for (const [key, value] of Object.entries(storedPersonal)) {
+    //   if (key !== "isValid") {
+    //     formData.append(key, value);
+    //   }
+    // }
+    const experienceArr = experience.map((exp) => exp);
+
+    axios
+      .post("https://resume.redberryinternship.ge/api/cvs", {
+        name: personal.name,
+        surname: personal.surname,
+        image: personal.image,
+        bio: personal.bio,
+        email: personal.email,
+        phone_number: personal.phone_number,
+        experiences: [experience[0]],
+        educations: [education[0]],
+      })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        if (error.response.status === 422) {
+          // Handle Unprocessable Entity (422) error
+          console.error(error.response.data);
+        } else {
+          // Handle other errors
+          console.error(error);
         }
-      );
-
-      if (!response.ok) {
-        const error = await response.json();
-        console.log(error);
-        throw new Error(error.message);
-      }
-
-      const data = await response.json();
-      console.log(data);
-    } catch (error) {
-      console.error(error);
-    }
+      });
   };
 
   const submitHandlerEdu = async (e) => {
@@ -282,7 +293,6 @@ export const CVContextProvider = (props) => {
           experience,
           education,
         },
-        cvIsValid: {},
         cvChangeHandler: {
           setPersonal,
           expHandler,

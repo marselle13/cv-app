@@ -17,20 +17,24 @@ const EducationFormInputs = () => {
             label="სასწავლებელი"
             valid="მინიმუმ 2 სიმბოლო"
             onChange={(event) =>
-              cvChangeHandler.eduHandler(index, "school", event.target.value)
+              cvChangeHandler.eduHandler(index, "institute", event.target.value)
             }
-            value={form.school}
-            isValid={form.isValid.school}
+            value={form.institute}
+            isValid={form.isValid.institute}
             placeholder="სასწავლებელი"
           />
           <div className={classes.formgrid}>
             <SelectInput index={index} isValid={form.isValid.degrees} />
             <InputDate
               label="დამთავრების რიცხვი"
-              isValid={form.isValid.endDate}
-              value={form.endDate}
+              isValid={form.isValid.due_date}
+              value={form.due_date}
               onChange={(event) =>
-                cvChangeHandler.eduHandler(index, "endDate", event.target.value)
+                cvChangeHandler.eduHandler(
+                  index,
+                  "due_date",
+                  event.target.value
+                )
               }
             />
           </div>

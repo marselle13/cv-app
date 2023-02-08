@@ -18,8 +18,8 @@ const ExpCV = () => {
         const expCheck =
           exp.position ||
           exp.employer ||
-          exp.startDate ||
-          exp.endDate ||
+          exp.start_date ||
+          exp.due_date ||
           exp.description;
 
         return (
@@ -30,8 +30,8 @@ const ExpCV = () => {
             check3={ctx.isSubmitExp}
             info1={exp.position}
             info2={exp.employer}
-            date1={exp.startDate}
-            date2={exp.endDate}
+            date1={exp.start_date}
+            date2={exp.due_date}
             description={exp.description}
           />
         );

@@ -12,16 +12,16 @@ const SelectInput = (props) => {
       <label>ხარისხი</label>
       <div
         className={`${classes.selectContainer} ${
-          cvData.education[props.index].select.degrees && classes.passBorder
+          cvData.education[props.index].select.degree && classes.passBorder
         }`}
         onClick={() => cvChangeHandler.selectHandler(props.index)}
       >
         <span
           className={
-            cvData.education[props.index].select.degrees ? classes.passText : ""
+            cvData.education[props.index].select.degree ? classes.passText : ""
           }
         >
-          {cvData.education[props.index].select.degrees || "აირჩიე ხარისხი"}
+          {cvData.education[props.index].select.degree || "აირჩიე ხარისხი"}
         </span>
         <img src={dropdown} alt="" />
       </div>

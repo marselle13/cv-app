@@ -1,35 +1,38 @@
 import classes from "./CV.module.css";
-import CV from "./CV";
-import arrow from "../../assets/landing-back.png";
 import close from "../../assets/close.png";
 import { useContext } from "react";
-import { useNavigate } from "react-router-dom";
 import cvContext from "../Store/cvContext";
+import BackLandingButton from "../UI/FormCard/BackLandingButton";
+import CVContainer from "../UI/CVcard/CVContainer";
+import PersonalCV from "./PersonalCV";
+import ExpCV from "./ExpCV";
+import EduCV from "./EduCV";
 
 const CVResult = () => {
-  const ctx = useContext(cvContext);
-  const navigate = useNavigate();
-
-  const endHandler = () => {
-    setTimeout(() => {
-      localStorage.clear();
-      window.location.reload();
-    }, 1000);
-
-    navigate("/");
-  };
+  const { cvData, tab, setTab } = useContext(cvContext);
+  const { postData } = cvData;
+  console.log(postData);
 
   return (
     <div className={classes.cvResult}>
-      <button onClick={endHandler}>
-        <img src={arrow} alt="" />
-      </button>
+      <BackLandingButton />
       <div className={classes.cvResultDiv}>
-        <CV />
+        <CVContainer>
+          <PersonalCV
+            name={postData?.name}
+            surname={postData?.surname}
+            email={postData?.email}
+            phone_number={postData?.phone_number}
+            bio={postData?.about_me}
+            storage={postData?.image}
+          />
+          <ExpCV experience={postData.experiences} />
+          <EduCV education={postData.educations} />
+        </CVContainer>
       </div>
-      <div className={`${classes.message} ${!ctx.tab && classes.close}`}>
+      <div className={`${classes.message} ${!tab && classes.close}`}>
         <div>
-          <img src={close} alt="" onClick={() => ctx.setTab(false)} />
+          <img src={close} alt="" onClick={() => setTab(false)} />
         </div>
 
         <h5>რეზიუმე წარმატებით გაიგზავნა 🎉</h5>

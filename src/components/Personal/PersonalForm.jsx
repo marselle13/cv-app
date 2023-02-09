@@ -30,13 +30,19 @@ const PersonalForm = () => {
   const uploadChangeHandler = (event) => {
     const reader = new FileReader();
     reader.readAsDataURL(event.target.files[0]);
+
     reader.onload = () => {
       setPersonal({
         ...personal,
         image: reader.result,
+        isValid: {
+          ...personal.isValid,
+          image: reader.result.length > 0,
+        },
       });
     };
   };
+
 
   return (
     <form className={classes.personal} onSubmit={ctx.submitHandlerPersonal}>

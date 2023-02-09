@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 const cvContext = React.createContext({
   cvData: {},
@@ -8,6 +8,7 @@ const cvContext = React.createContext({
 
 export const CVContextProvider = (props) => {
   const [degrees, setDegress] = useState({});
+  const [postData, setPostData] = useState({});
   const [tab, setTab] = useState(false);
   const [isSubmit, setIsSubmit] = useState(
     localStorage.getItem("submit") || ""
@@ -16,6 +17,7 @@ export const CVContextProvider = (props) => {
     localStorage.getItem("submitExp") || ""
   );
   const navigate = useNavigate();
+  const location = useLocation();
   const [border, setBorder] = useState(localStorage.getItem("border") || "");
   const [addExpSize, setAddExpSize] = useState(
     localStorage.getItem("expSize") || false
@@ -35,6 +37,7 @@ export const CVContextProvider = (props) => {
       surname: false,
       email: false,
       mobile: false,
+      image: false,
       phone_number: false,
     },
   });
@@ -59,14 +62,14 @@ export const CVContextProvider = (props) => {
       institute: "",
       degree_id: null,
       select: {
-        degrees: "",
+        degree: "",
         isSelected: false,
       },
       due_date: "",
       description: "",
       isValid: {
         institute: false,
-        degrees: false,
+        degree: false,
         due_date: false,
         description: false,
       },
@@ -106,6 +109,12 @@ export const CVContextProvider = (props) => {
     localStorage.setItem("education", JSON.stringify(education));
   });
 
+  // useEffect(() => {
+  //   if (location.pathname === "/") {
+  //     localStorage.clear();
+  //   }
+  // }, [location.pathname]);
+
   const getData = async () => {
     const response = await fetch(
       "https://resume.redberryinternship.ge/api/degrees"
@@ -118,7 +127,8 @@ export const CVContextProvider = (props) => {
     personal.isValid.name &&
     personal.isValid.surname &&
     personal.isValid.email &&
-    personal.isValid.phone_number;
+    personal.isValid.phone_number &&
+    personal.isValid.image;
 
   const submitHandlerPersonal = (e) => {
     e.preventDefault();
@@ -196,7 +206,7 @@ export const CVContextProvider = (props) => {
     const updateSelect = [...education];
     console.log(updateSelect);
     updateSelect[index].degree_id = id;
-    updateSelect[index].select.degrees = value;
+    updateSelect[index].select.degree = value;
     setEducation(updateSelect);
     updateSelect[index].select.isSelected =
       !updateSelect[index].select.isSelected;
@@ -219,11 +229,11 @@ export const CVContextProvider = (props) => {
     let eduUpdate = [];
     const submitIsValidEdu =
       education[index].isValid.institute &&
-      education[index].select.degrees &&
+      education[index].select.degree &&
       education[index].isValid.due_date &&
       education[index].isValid.description;
     const { institute, select, due_date, description } = edu;
-    if (institute || select.degrees || due_date || description) {
+    if (institute || select.degree || due_date || description) {
       eduUpdate = submitIsValidEdu;
     }
     return eduUpdate;
@@ -236,7 +246,7 @@ export const CVContextProvider = (props) => {
       name: personal.name,
       image: file,
       surname: personal.surname,
-      bio: personal.bio,
+      about_me: personal.bio,
       email: personal.email,
       phone_number: personal.phone_number,
       experiences: [experience[0]],
@@ -252,6 +262,7 @@ export const CVContextProvider = (props) => {
       })
       .then((response) => {
         console.log(response);
+        setPostData(response.data);
         setTab(true);
       })
       .catch((error) => {
@@ -279,6 +290,7 @@ export const CVContextProvider = (props) => {
           personal,
           experience,
           education,
+          postData,
         },
         cvChangeHandler: {
           setPersonal,

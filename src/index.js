@@ -7,7 +7,7 @@ import { CVContextProvider } from "./components/Store/cvContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <BrowserRouter>
+  <BrowserRouter basename="/">
     <CVContextProvider>
       <App />
     </CVContextProvider>

@@ -8,8 +8,8 @@ const EducationForm = () => {
   const ctx = useContext(cvContext);
   const education = {
     institute: "",
+    degree_id: null,
     select: {
-      degree_id: 0,
       degrees: "",
       isSelected: false,
     },

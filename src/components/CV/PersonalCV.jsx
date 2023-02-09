@@ -42,9 +42,7 @@ const PersonalCV = () => {
         )}
       </div>
       <div className={classes.imageDiv}>
-        {cvData.enteredImage && (
-          <img src={cvData.enteredImage} alt="personal" />
-        )}
+        {personal.image && <img src={personal.image} alt="personal" />}
       </div>
     </div>
   );

@@ -5,8 +5,7 @@ import cvContext from "../../../Store/cvContext";
 
 const SelectInput = (props) => {
   const ctx = useContext(cvContext);
-  const { cvData } = ctx;
-  const { cvChangeHandler } = ctx;
+  const { cvData, cvChangeHandler } = ctx;
 
   return (
     <div className={classes.selectDiv}>
@@ -31,7 +30,11 @@ const SelectInput = (props) => {
           <ul>
             {ctx.degrees.map((option) => (
               <li
-                onClick={ctx.onOptionClicked(option.title, props.index)}
+                onClick={ctx.onOptionClicked(
+                  option.id,
+                  option.title,
+                  props.index
+                )}
                 key={option.id}
               >
                 {option.title}

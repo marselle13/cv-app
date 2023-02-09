@@ -2,17 +2,21 @@ import classes from "./CV.module.css";
 import CV from "./CV";
 import arrow from "../../assets/landing-back.png";
 import close from "../../assets/close.png";
-import { useState } from "react";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import cvContext from "../Store/cvContext";
 
 const CVResult = () => {
-  const [closeTab, setCloseTab] = useState(false);
+  const ctx = useContext(cvContext);
   const navigate = useNavigate();
 
   const endHandler = () => {
-    localStorage.clear();
+    setTimeout(() => {
+      localStorage.clear();
+      window.location.reload();
+    }, 1000);
+
     navigate("/");
-    window.location.reload();
   };
 
   return (
@@ -23,9 +27,9 @@ const CVResult = () => {
       <div className={classes.cvResultDiv}>
         <CV />
       </div>
-      <div className={`${classes.message} ${closeTab && classes.close}`}>
+      <div className={`${classes.message} ${!ctx.tab && classes.close}`}>
         <div>
-          <img src={close} alt="" onClick={() => setCloseTab(true)} />
+          <img src={close} alt="" onClick={() => ctx.setTab(false)} />
         </div>
 
         <h5>რეზიუმე წარმატებით გაიგზავნა 🎉</h5>

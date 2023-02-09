@@ -13,7 +13,6 @@ const PersonalForm = () => {
   const { setPersonal } = cvChangeHandler;
   const regexGeorgian = /^[\u10A0-\u10FF]+$/;
   const regexEmail = /^[a-zA-Z0-9._%+-]+@redberry\.ge$/;
-  console.log(regexEmail.test("2@redberry.ge"));
   const regexMobile = /^(\+995)(79\d{7}|5\d{8})$/;
   const personalHandlerName = (e, field) => {
     setPersonal({
@@ -23,9 +22,20 @@ const PersonalForm = () => {
         ...personal.isValid,
         [field]:
           e.target.value.trim().length > 1 &&
-          regexGeorgian.test(e.target.value),
+          regexGeorgian.test(e.target.value.trim()),
       },
     });
+  };
+
+  const uploadChangeHandler = (event) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(event.target.files[0]);
+    reader.onload = () => {
+      setPersonal({
+        ...personal,
+        image: reader.result,
+      });
+    };
   };
 
   return (
@@ -51,7 +61,7 @@ const PersonalForm = () => {
         />
       </div>
       <div>
-        <InputUpload onChange={cvChangeHandler.uploadChangeHandler} />
+        <InputUpload onChange={uploadChangeHandler} />
         <InputArea
           rows="4"
           label="ჩემ შესახებ (არასავალდებულო)"

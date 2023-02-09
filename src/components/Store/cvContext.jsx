@@ -8,8 +8,8 @@ const cvContext = React.createContext({
 });
 
 export const CVContextProvider = (props) => {
-  const [data, setData] = useState({});
   const [degrees, setDegress] = useState({});
+  const [tab, setTab] = useState(false);
   const [isSubmit, setIsSubmit] = useState(
     localStorage.getItem("submit") || ""
   );
@@ -17,9 +17,6 @@ export const CVContextProvider = (props) => {
     localStorage.getItem("submitExp") || ""
   );
   const navigate = useNavigate();
-  const [enteredImage, setEnteredImage] = useState(
-    localStorage.getItem("image") || ""
-  );
   const [border, setBorder] = useState(localStorage.getItem("border") || "");
   const [addExpSize, setAddExpSize] = useState(
     localStorage.getItem("expSize") || false
@@ -61,8 +58,8 @@ export const CVContextProvider = (props) => {
   const [education, setEducation] = useState([
     {
       institute: "",
+      degree_id: null,
       select: {
-        degree_id: 0,
         degrees: "",
         isSelected: false,
       },
@@ -78,13 +75,6 @@ export const CVContextProvider = (props) => {
   ]);
 
   useEffect(() => {
-    localStorage.setItem("image", enteredImage);
-    return () => {
-      URL.revokeObjectURL(enteredImage);
-    };
-  }, [enteredImage]);
-
-  useEffect(() => {
     const savedPersonal = JSON.parse(localStorage.getItem("personal"));
     if (savedPersonal) {
       setPersonal(savedPersonal);
@@ -92,7 +82,6 @@ export const CVContextProvider = (props) => {
     const savedExperience = JSON.parse(localStorage.getItem("experience"));
     if (savedExperience) {
       setExperience(savedExperience);
-      setData(savedExperience);
     }
     const savedEducation = JSON.parse(localStorage.getItem("education"));
     if (savedEducation) {
@@ -100,15 +89,23 @@ export const CVContextProvider = (props) => {
     }
     getData();
   }, []);
-  console.log(data);
   useEffect(() => {
     localStorage.setItem("border", border);
     localStorage.setItem("expSize", addExpSize);
     localStorage.setItem("eduSize", addEduSize);
     localStorage.setItem("submit", isSubmit);
     localStorage.setItem("submitExp", isSubmitExp);
+  }, [border, addExpSize, addEduSize, isSubmit, isSubmitExp]);
+
+  useEffect(() => {
     localStorage.setItem("personal", JSON.stringify(personal));
-  }, [border, addExpSize, addEduSize, isSubmit, isSubmitExp, personal]);
+  }, [personal]);
+  useEffect(() => {
+    localStorage.setItem("experience", JSON.stringify(experience));
+  }, [experience]);
+  useEffect(() => {
+    localStorage.setItem("education", JSON.stringify(education));
+  });
 
   const getData = async () => {
     const response = await fetch(
@@ -126,20 +123,18 @@ export const CVContextProvider = (props) => {
 
   const submitHandlerPersonal = (e) => {
     e.preventDefault();
-    localStorage.setItem("personal", JSON.stringify(personal));
+
     if (checkValidationPersonal) {
       navigate("/experience");
       setBorder("done");
     }
   };
-  console.log(data);
 
   const expHandler = (index, field, value) => {
     const updateForms = [...experience];
     updateForms[index][field] = value;
     updateForms[index].isValid = isValidExp(experience[index]);
     setExperience(updateForms);
-    localStorage.setItem("experience", JSON.stringify(experience));
   };
 
   const isValidExp = (form) => ({
@@ -189,7 +184,6 @@ export const CVContextProvider = (props) => {
     updateFormsEdu[index][field] = value;
     updateFormsEdu[index].isValid = isValidEdu(education[index]);
     setEducation(updateFormsEdu);
-    localStorage.setItem("education", JSON.stringify(education));
   };
 
   const selectHandler = (index) => {
@@ -199,8 +193,10 @@ export const CVContextProvider = (props) => {
     setEducation(updateSelect);
   };
 
-  const onOptionClicked = (value, index) => () => {
+  const onOptionClicked = (id, value, index) => () => {
     const updateSelect = [...education];
+    console.log(updateSelect);
+    updateSelect[index].degree_id = id;
     updateSelect[index].select.degrees = value;
     setEducation(updateSelect);
     updateSelect[index].select.isSelected =
@@ -234,41 +230,33 @@ export const CVContextProvider = (props) => {
     return eduUpdate;
   });
 
-  const [error, setError] = useState(null);
-
   const handleSubmit = async () => {
-    // const formData = new FormData();
-    // const storedPersonal = JSON.parse(localStorage.getItem("personal"));
-    // const storedExperience = JSON.parse(localStorage.getItem("experience"));
-    // for (const [key, value] of Object.entries(storedPersonal)) {
-    //   if (key !== "isValid") {
-    //     formData.append(key, value);
-    //   }
-    // }
-    const experienceArr = experience.map((exp) => exp);
+    const blob = await axios.get(personal.image, { responseType: "blob" });
+    const file = new File([blob.data], "File name", { type: "image/png" });
+    const jsonData = {
+      name: personal.name,
+      image: file,
+      surname: personal.surname,
+      bio: personal.bio,
+      email: personal.email,
+      phone_number: personal.phone_number,
+      experiences: [experience[0]],
+      educations: [education[0]],
+    };
 
     axios
-      .post("https://resume.redberryinternship.ge/api/cvs", {
-        name: personal.name,
-        surname: personal.surname,
-        image: personal.image,
-        bio: personal.bio,
-        email: personal.email,
-        phone_number: personal.phone_number,
-        experiences: [experience[0]],
-        educations: [education[0]],
+      .post("https://resume.redberryinternship.ge/api/cvs", jsonData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Accept: "application/json",
+        },
       })
       .then((response) => {
         console.log(response);
+        setTab(true);
       })
       .catch((error) => {
-        if (error.response.status === 422) {
-          // Handle Unprocessable Entity (422) error
-          console.error(error.response.data);
-        } else {
-          // Handle other errors
-          console.error(error);
-        }
+        console.error(error);
       });
   };
 
@@ -299,6 +287,8 @@ export const CVContextProvider = (props) => {
           eduHandler,
           selectHandler,
         },
+        tab,
+        setTab,
         border,
         addExp,
         addExpSize,

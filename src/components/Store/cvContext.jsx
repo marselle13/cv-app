@@ -1,32 +1,111 @@
 import React, { useEffect, useState } from "react";
-import useInput from "../hooks/use-input";
 import { useNavigate } from "react-router-dom";
-
+import axios from "axios";
 const cvContext = React.createContext({
-  border: false,
   cvData: {},
   cvIsValid: {},
   cvChangeHandler: {},
-  submitHandlerPersonal: () => {},
-  addMoreHandler: () => {},
 });
 
 export const CVContextProvider = (props) => {
-  const [enteredBio, setEnteredBio] = useState("");
-  const [enteredImage, setEnteredImage] = useState(null);
-  const [border, setBorder] = useState(false);
-  const [selectInput, setSelectInput] = useState("");
-  const [isVisible, setIsVisible] = useState(false);
   const [degrees, setDegress] = useState({});
-
+  const [tab, setTab] = useState(false);
+  const [isSubmit, setIsSubmit] = useState(
+    localStorage.getItem("submit") || ""
+  );
+  const [isSubmitExp, setIsSubmitExp] = useState(
+    localStorage.getItem("submitExp") || ""
+  );
   const navigate = useNavigate();
-  const regexGeorgian = /^[\u10A0-\u10FF]+$/;
-  const regexEmail = /^([A-Za-z0-9_\-\.])+\@([redberry])+\.(ge)$/;
-  const regexMobile = /^(\+995)(79\d{7}|5\d{8})$/;
+  const [border, setBorder] = useState(localStorage.getItem("border") || "");
+  const [addExpSize, setAddExpSize] = useState(
+    localStorage.getItem("expSize") || false
+  );
+  const [addEduSize, setAddEduSize] = useState(
+    localStorage.getItem("eduSize") || false
+  );
+  const [personal, setPersonal] = useState({
+    name: "",
+    surname: "",
+    email: "",
+    phone_number: "",
+    image: "",
+    bio: "",
+    isValid: {
+      name: false,
+      surname: false,
+      email: false,
+      mobile: false,
+      phone_number: false,
+    },
+  });
+  const [experience, setExperience] = useState([
+    {
+      position: "",
+      employer: "",
+      start_date: "",
+      due_date: "",
+      description: "",
+      isValid: {
+        position: false,
+        employer: false,
+        start_date: false,
+        due_date: false,
+        description: false,
+      },
+    },
+  ]);
+  const [education, setEducation] = useState([
+    {
+      institute: "",
+      degree_id: null,
+      select: {
+        degrees: "",
+        isSelected: false,
+      },
+      due_date: "",
+      description: "",
+      isValid: {
+        institute: false,
+        degrees: false,
+        due_date: false,
+        description: false,
+      },
+    },
+  ]);
 
   useEffect(() => {
+    const savedPersonal = JSON.parse(localStorage.getItem("personal"));
+    if (savedPersonal) {
+      setPersonal(savedPersonal);
+    }
+    const savedExperience = JSON.parse(localStorage.getItem("experience"));
+    if (savedExperience) {
+      setExperience(savedExperience);
+    }
+    const savedEducation = JSON.parse(localStorage.getItem("education"));
+    if (savedEducation) {
+      setEducation(savedEducation);
+    }
     getData();
   }, []);
+  useEffect(() => {
+    localStorage.setItem("border", border);
+    localStorage.setItem("expSize", addExpSize);
+    localStorage.setItem("eduSize", addEduSize);
+    localStorage.setItem("submit", isSubmit);
+    localStorage.setItem("submitExp", isSubmitExp);
+  }, [border, addExpSize, addEduSize, isSubmit, isSubmitExp]);
+
+  useEffect(() => {
+    localStorage.setItem("personal", JSON.stringify(personal));
+  }, [personal]);
+  useEffect(() => {
+    localStorage.setItem("experience", JSON.stringify(experience));
+  }, [experience]);
+  useEffect(() => {
+    localStorage.setItem("education", JSON.stringify(education));
+  });
 
   const getData = async () => {
     const response = await fetch(
@@ -36,72 +115,20 @@ export const CVContextProvider = (props) => {
     setDegress(data);
   };
 
-  const {
-    value: enteredName,
-    isValid: nameIsValid,
-    valueChangeHandler: nameChangeHandler,
-  } = useInput(
-    (value) => regexGeorgian.test(value.trim()) && value.trim().length > 1
-  );
-
-  const bioChangeHandler = (e) => {
-    setEnteredBio(e.target.value);
-  };
-
-  const {
-    value: enteredLastname,
-    isValid: lastnameIsValid,
-    valueChangeHandler: lastnameChangeHandler,
-  } = useInput(
-    (value) => regexGeorgian.test(value.trim()) && value.trim().length > 1
-  );
-  const uploadChangeHandler = (e) => {
-    const uploadImage = e.target.files[0];
-    setEnteredImage(URL.createObjectURL(uploadImage));
-  };
-  const {
-    value: enteredEmail,
-    isValid: emailIsValid,
-    valueChangeHandler: emailChangeHandler,
-  } = useInput((value) => regexEmail.test(value.trim()));
-
-  const {
-    value: enteredMobile,
-    isValid: mobileIsValid,
-    valueChangeHandler: mobileChangeHandler,
-  } = useInput((value) => regexMobile.test(value.trim()));
-
   const checkValidationPersonal =
-    nameIsValid &&
-    lastnameIsValid &&
-    emailIsValid &&
-    mobileIsValid &&
-    enteredImage;
+    personal.isValid.name &&
+    personal.isValid.surname &&
+    personal.isValid.email &&
+    personal.isValid.phone_number;
 
   const submitHandlerPersonal = (e) => {
     e.preventDefault();
+
     if (checkValidationPersonal) {
       navigate("/experience");
-      setBorder(true);
+      setBorder("done");
     }
   };
-
-  const [experience, setExperience] = useState([
-    {
-      position: "",
-      employer: "",
-      startDate: "",
-      endDate: "",
-      description: "",
-      isValid: {
-        position: false,
-        employer: false,
-        startDate: false,
-        endDate: false,
-        description: false,
-      },
-    },
-  ]);
 
   const expHandler = (index, field, value) => {
     const updateForms = [...experience];
@@ -110,139 +137,172 @@ export const CVContextProvider = (props) => {
     setExperience(updateForms);
   };
 
-  const isValidExp = (form) => {
-    let valid = {
-      position: false,
-      employer: false,
-      startDate: false,
-      endDate: false,
-      description: false,
-    };
-    if (form.position.trim().length > 1) {
-      valid.position = true;
-    } else {
-      valid.position = false;
-    }
+  const isValidExp = (form) => ({
+    position: form.position.trim().length > 1,
+    employer: form.employer.trim().length > 1,
+    start_date: form.start_date.length !== 0,
+    due_date: form.due_date.length !== 0,
+    description: form.description.length !== 0,
+  });
 
-    if (form.employer.trim().length > 1) {
-      valid.employer = true;
-    } else {
-      valid.employer = false;
-    }
-
-    if (form.startDate.length !== 0) {
-      valid.startDate = true;
-    } else {
-      valid.startDate = false;
-    }
-
-    if (form.endDate.length !== 0) {
-      valid.endDate = true;
-    } else {
-      valid.endDate = false;
-    }
-
-    if (form.description.length !== 0) {
-      valid.description = true;
-    } else {
-      valid.description = false;
-    }
-
-    return valid;
-  };
-
-  const addExp = (e) => {
+  const addExp = (e, add) => {
     e.preventDefault();
-    setExperience([
-      ...experience,
-      {
-        position: "",
-        employer: "",
-        startDate: "",
-        endDate: "",
-        description: "",
-        isValid: {
-          position: false,
-          employer: false,
-          startDate: false,
-          endDate: false,
-          description: false,
-        },
-      },
-    ]);
+    const updateExp = [...experience, add];
+    setExperience(updateExp);
+    setAddExpSize(true);
   };
 
   const submitArrExp = experience.map((exp, index) => {
+    let checkInputs = [];
     const submitIsValidExp =
       experience[index].isValid.position &&
       experience[index].isValid.employer &&
-      experience[index].isValid.startDate &&
-      experience[index].isValid.endDate &&
+      experience[index].isValid.start_date &&
+      experience[index].isValid.due_date &&
       experience[index].isValid.description;
 
-    const { position, employer, startDate, endDate, description } = exp;
-    if (position || employer || startDate || endDate || description) {
-      return submitIsValidExp;
+    const { position, employer, start_date, due_date, description } = exp;
+    if (position || employer || start_date || due_date || description) {
+      checkInputs = submitIsValidExp;
     }
+    return checkInputs;
   });
 
   const submitHandlerExp = (e) => {
     e.preventDefault();
     const trueArr = submitArrExp.filter((item) => item === true);
     const falseArr = submitArrExp.filter((item) => item === false);
-    submitArrExp.forEach((item) => {
-      if (trueArr.length > 0 && falseArr.length === 0) {
-        navigate("/education");
-      }
-    });
+
+    if (trueArr.length > 0 && falseArr.length === 0) {
+      navigate("/education");
+      setIsSubmitExp("true");
+    }
   };
 
-  const selectHandler = () => {
-    setIsVisible((prev) => !prev);
+  const eduHandler = (index, field, value) => {
+    const updateFormsEdu = [...education];
+    updateFormsEdu[index][field] = value;
+    updateFormsEdu[index].isValid = isValidEdu(education[index]);
+    setEducation(updateFormsEdu);
   };
 
-  const onOptionClicked = (value) => () => {
-    setSelectInput(value);
-    setIsVisible(false);
+  const selectHandler = (index) => {
+    const updateSelect = [...education];
+    updateSelect[index].select.isSelected =
+      !updateSelect[index].select.isSelected;
+    setEducation(updateSelect);
+  };
+
+  const onOptionClicked = (id, value, index) => () => {
+    const updateSelect = [...education];
+    console.log(updateSelect);
+    updateSelect[index].degree_id = id;
+    updateSelect[index].select.degrees = value;
+    setEducation(updateSelect);
+    updateSelect[index].select.isSelected =
+      !updateSelect[index].select.isSelected;
+  };
+
+  const isValidEdu = (form) => ({
+    institute: form.institute.trim().length > 1,
+    due_date: form.due_date.length !== 0,
+    description: form.description.length !== 0,
+  });
+
+  const addEdu = (e, add) => {
+    e.preventDefault();
+    const updateEdu = [...education, add];
+    setEducation(updateEdu);
+    setAddEduSize(true);
+  };
+
+  const submitArrEdu = education.map((edu, index) => {
+    let eduUpdate = [];
+    const submitIsValidEdu =
+      education[index].isValid.institute &&
+      education[index].select.degrees &&
+      education[index].isValid.due_date &&
+      education[index].isValid.description;
+    const { institute, select, due_date, description } = edu;
+    if (institute || select.degrees || due_date || description) {
+      eduUpdate = submitIsValidEdu;
+    }
+    return eduUpdate;
+  });
+
+  const handleSubmit = async () => {
+    const blob = await axios.get(personal.image, { responseType: "blob" });
+    const file = new File([blob.data], "File name", { type: "image/png" });
+    const jsonData = {
+      name: personal.name,
+      image: file,
+      surname: personal.surname,
+      bio: personal.bio,
+      email: personal.email,
+      phone_number: personal.phone_number,
+      experiences: [experience[0]],
+      educations: [education[0]],
+    };
+
+    axios
+      .post("https://resume.redberryinternship.ge/api/cvs", jsonData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Accept: "application/json",
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        setTab(true);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const submitHandlerEdu = async (e) => {
+    e.preventDefault();
+    const trueArr = submitArrEdu.filter((item) => item === true);
+    const falseArr = submitArrEdu.filter((item) => item === false);
+    const emptyArr = submitArrEdu.filter((item) => item === "");
+
+    if (trueArr.length > 0 && falseArr.length === 0 && emptyArr.length === 0) {
+      handleSubmit();
+      navigate("/cv");
+      setIsSubmit("true");
+    }
   };
 
   return (
     <cvContext.Provider
       value={{
         cvData: {
-          enteredName,
-          enteredLastname,
-          enteredBio,
-          enteredImage,
-          enteredEmail,
-          enteredMobile,
+          personal,
           experience,
-          selectInput,
-        },
-        cvIsValid: {
-          nameIsValid,
-          lastnameIsValid,
-          emailIsValid,
-          mobileIsValid,
+          education,
         },
         cvChangeHandler: {
-          nameChangeHandler,
-          lastnameChangeHandler,
-          bioChangeHandler,
-          uploadChangeHandler,
-          emailChangeHandler,
-          mobileChangeHandler,
+          setPersonal,
           expHandler,
+          eduHandler,
           selectHandler,
         },
+        tab,
+        setTab,
         border,
         addExp,
+        addExpSize,
+        addEdu,
+        addEduSize,
         degrees,
         onOptionClicked,
-        isVisible,
+        isSubmit,
+        isSubmitExp,
         submitHandlerPersonal,
         submitHandlerExp,
+        submitHandlerEdu,
         submitArrExp,
+        submitArrEdu,
       }}
     >
       {props.children}

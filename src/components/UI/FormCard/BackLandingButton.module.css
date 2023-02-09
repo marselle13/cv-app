@@ -1,8 +1,12 @@
 .backLanding {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
+  justify-content: center;
   background-color: transparent;
+  border-radius: 50%;
   border: none;
   cursor: pointer;
   margin-top: 0.5rem;
+  width: 40px;
+  height: 40px;
 }

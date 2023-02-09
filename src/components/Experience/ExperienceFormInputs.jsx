@@ -5,11 +5,10 @@ import cvContext from "../Store/cvContext";
 import InputDate from "../UI/FormCard/Inputs/InputDate";
 import InputArea from "../UI/FormCard/Inputs/InputArea";
 
-const ExperienceFormInputs = (props) => {
+const ExperienceFormInputs = () => {
   const ctx = useContext(cvContext);
   const { cvChangeHandler } = ctx;
   const { cvData } = ctx;
-
   return (
     <Fragment>
       {cvData.experience.map((form, index) => (
@@ -40,25 +39,28 @@ const ExperienceFormInputs = (props) => {
 
           <div className={classes.formgrid}>
             <InputDate
-              name="startDate"
               label="დაწყების რიცხვი"
               onChange={(event) =>
                 cvChangeHandler.expHandler(
                   index,
-                  "startDate",
+                  "start_date",
                   event.target.value
                 )
               }
-              value={form.startDate}
-              isValid={form.isValid.startDate}
+              value={form.start_date}
+              isValid={form.isValid.start_date}
             />
             <InputDate
               label="დამთავრების რიცხვი"
               onChange={(event) =>
-                cvChangeHandler.expHandler(index, "endDate", event.target.value)
+                cvChangeHandler.expHandler(
+                  index,
+                  "due_date",
+                  event.target.value
+                )
               }
-              value={form.endDate}
-              isValid={form.isValid.endDate}
+              value={form.due_date}
+              isValid={form.isValid.due_date}
             />
           </div>
           <InputArea

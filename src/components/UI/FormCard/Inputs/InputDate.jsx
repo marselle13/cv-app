@@ -7,6 +7,7 @@ const InputDate = (props) => {
       <input
         type="date"
         onChange={props.onChange}
+        value={props.value}
         className={`${props.isValid && classes.passBorder}`}
       />
     </div>

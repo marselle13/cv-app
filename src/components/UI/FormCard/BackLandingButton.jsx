@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const BackLandingButton = (props) => {
   return (
-    <Link to="/cv-app" onClick={props.end}>
+    <Link to="/" onClick={props.end}>
       <button className={classes.backLanding}>
         <img src={landingBack} alt="" />
       </button>

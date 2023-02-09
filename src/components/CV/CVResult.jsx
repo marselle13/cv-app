@@ -16,7 +16,7 @@ const CVResult = () => {
       window.location.reload();
     }, 1000);
 
-    navigate("/");
+    navigate("/cv-app");
   };
 
   return (

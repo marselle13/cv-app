@@ -9,7 +9,7 @@ function App() {
   return (
     <div>
       <Routes>
-        <Route exact path="/cv-app" element={<LandingPage />} />
+        <Route exact path="/" element={<LandingPage />} />
         <Route path="/personal" element={<Personal />} />
         <Route path="/experience" element={<Experience />} />
         <Route path="/education" element={<Education />} />

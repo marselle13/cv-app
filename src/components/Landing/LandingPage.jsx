@@ -1,9 +1,22 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import backgroundLogo from "../../assets/background-logo.png";
 import classes from "./LandingPage.module.css";
+import React, { useEffect } from "react";
 
-const LandingPage = () => {
+const LandingPage = (props) => {
+  const location = useLocation();
+
+  useEffect(() => {
+    const firstReload = localStorage.getItem("firstReload");
+
+    if (location.pathname === "/" && firstReload === null) {
+      localStorage.clear();
+      localStorage.setItem("firstReload", "true");
+      window.location.reload();
+    }
+  }, [location.pathname]);
+
   return (
     <div className={classes.landing}>
       <div className={classes.header}>

@@ -32,6 +32,7 @@ const ExperienceForm = () => {
         back="/personal"
         add={(e) => ctx.addExp(e, exp)}
         label="მეტი გამოცდილების დამატება"
+        buttonLabel="შემდეგი"
       />
     </form>
   );

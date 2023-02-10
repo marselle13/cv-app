@@ -23,6 +23,7 @@ const Input = (props) => {
           }`}
           placeholder={props.placeholder}
           name={props.name}
+    
         />
         {props.isValid && (
           <img src={passIcon} alt="pass" className={classes.pass} />

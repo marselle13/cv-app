@@ -13,3 +13,11 @@
   text-align: center;
   margin: auto 0 0 auto;
 }
+
+.nextPage:hover {
+  background: #7949ff;
+}
+
+.nextPage:focus {
+  background: #512faf;
+}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 const cvContext = React.createContext({
   cvData: {},
@@ -7,8 +7,10 @@ const cvContext = React.createContext({
 });
 
 export const CVContextProvider = (props) => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [degrees, setDegress] = useState({});
-  const [postData, setPostData] = useState({});
+  const [postData, setPostData] = useState("");
   const [tab, setTab] = useState(false);
   const [isSubmit, setIsSubmit] = useState(
     localStorage.getItem("submit") || ""
@@ -16,7 +18,6 @@ export const CVContextProvider = (props) => {
   const [isSubmitExp, setIsSubmitExp] = useState(
     localStorage.getItem("submitExp") || ""
   );
-  const navigate = useNavigate();
   const [border, setBorder] = useState(localStorage.getItem("border") || "");
   const [addExpSize, setAddExpSize] = useState(
     localStorage.getItem("expSize") || false
@@ -114,6 +115,13 @@ export const CVContextProvider = (props) => {
   useEffect(() => {
     localStorage.setItem("postData", JSON.stringify(postData));
   }, [postData]);
+  useEffect(() => {
+    if (location.pathname === "/cv") {
+      localStorage.removeItem("personal");
+      localStorage.removeItem("experience");
+      localStorage.removeItem("education");
+    }
+  }, [location.pathname]);
 
   const getData = async () => {
     const response = await fetch(
@@ -253,8 +261,6 @@ export const CVContextProvider = (props) => {
 
     if (trueArr.length > 0 && falseArr.length === 0) {
       handleSubmit();
-      setIsSubmit("true");
-      navigate("/cv");
     }
   };
 
@@ -297,9 +303,13 @@ export const CVContextProvider = (props) => {
       })
       .then((response) => {
         setPostData(response.data);
+        setIsSubmit("true");
         setTab(true);
+        navigate("/cv");
       })
       .catch((error) => {
+        setIsSubmit("");
+        setTab(false);
         console.error(error);
       });
   };

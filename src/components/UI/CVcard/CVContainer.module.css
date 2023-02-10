@@ -18,3 +18,7 @@
 .cv .cvDiv {
   width: 100%;
 }
+
+.cvBorder {
+  border: 0.8px solid #000000;
+}

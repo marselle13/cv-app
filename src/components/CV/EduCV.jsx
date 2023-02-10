@@ -10,13 +10,13 @@ const EduCV = (props) => {
     <div className={classes.eduDiv}>
       {show.length !== 0 && <h4>განათლება</h4>}
 
-      {props.education &&
+      {(props.education || cvData.postData) &&
         props.education.map((edu, index) => {
           const eduCheck =
-            cvData.education[index].institute ||
-            cvData.education[index].select.degree ||
-            cvData.education[index].due_date ||
-            cvData.education[index].description;
+            edu.institute ||
+            edu.select.degree ||
+            edu.due_date ||
+            edu.description;
 
           return (
             <CVCard

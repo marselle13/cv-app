@@ -43,7 +43,6 @@ const PersonalForm = () => {
     };
   };
 
-
   return (
     <form className={classes.personal} onSubmit={ctx.submitHandlerPersonal}>
       <div className={classes.formgrid}>
@@ -114,7 +113,7 @@ const PersonalForm = () => {
           />
         </div>
       </div>
-      <NextPageButton />
+      <NextPageButton buttonLabel="შემდეგი" />
     </form>
   );
 };

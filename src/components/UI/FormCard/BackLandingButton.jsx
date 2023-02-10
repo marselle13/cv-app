@@ -7,8 +7,6 @@ const BackLandingButton = () => {
 
   const clear = () => {
     navigate("/");
-    localStorage.clear();
-    window.location.reload();
   };
 
   return (

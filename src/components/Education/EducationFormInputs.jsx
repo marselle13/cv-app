@@ -6,8 +6,7 @@ import SelectInput from "../UI/FormCard/Inputs/SelectInput";
 import InputDate from "../UI/FormCard/Inputs/InputDate";
 import InputArea from "../UI/FormCard/Inputs/InputArea";
 const EducationFormInputs = () => {
-  const ctx = useContext(cvContext);
-  const { cvData, cvChangeHandler } = ctx;
+  const { cvData, cvChangeHandler } = useContext(cvContext);
 
   return (
     <Fragment>

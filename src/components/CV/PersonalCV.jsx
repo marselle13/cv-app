@@ -3,14 +3,19 @@ import cvContext from "../Store/cvContext";
 import classes from "./PersonalCV.module.css";
 import email from "../../assets/email.png";
 import mobile from "../../assets/mobile.png";
+import { useLocation } from "react-router-dom";
 
 const PersonalCV = (props) => {
-  const { border } = useContext(cvContext);
-
+  const { border, isSubmit } = useContext(cvContext);
+  const location = useLocation();
   return (
     <div
       className={classes.personalDiv}
-      style={{ borderBottom: border && "1px solid  #C8C8C8" }}
+      style={{
+        borderBottom:
+          (border || (isSubmit && location.pathname === "/cv")) &&
+          "1px solid  #C8C8C8",
+      }}
     >
       <div>
         {(props.name || props.surname) && (

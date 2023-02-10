@@ -120,6 +120,7 @@ export const CVContextProvider = (props) => {
       localStorage.removeItem("personal");
       localStorage.removeItem("experience");
       localStorage.removeItem("education");
+      localStorage.removeItem("border");
     }
   }, [location.pathname]);
 

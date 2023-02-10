@@ -7,7 +7,6 @@ const EduCV = (props) => {
   const { cvData, submitArrEdu, addEduSize, isSubmit } = useContext(cvContext);
   const location = useLocation(cvContext);
   const show = submitArrEdu.filter((item) => item === true || item === false);
-  console.log(location);
 
   return (
     <div className={classes.eduDiv}>

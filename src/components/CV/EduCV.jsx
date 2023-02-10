@@ -4,9 +4,7 @@ import { useContext } from "react";
 import CVCard from "../UI/CVcard/CVCard";
 const EduCV = (props) => {
   const { cvData, submitArrEdu, addEduSize, isSubmit } = useContext(cvContext);
-  const show = submitArrEdu.filter(
-    (item) => item === true || item === false || item === ""
-  );
+  const show = submitArrEdu.filter((item) => item === true || item === false);
 
   return (
     <div className={classes.eduDiv}>
@@ -27,7 +25,7 @@ const EduCV = (props) => {
               check2={addEduSize}
               check3={isSubmit}
               info1={edu.institute}
-              info2={edu.select.degree}
+              info2={edu.degree || edu.select.degree}
               date1={edu.due_date}
               description={edu.description}
             />

@@ -10,13 +10,14 @@ const EducationForm = () => {
     institute: "",
     degree_id: null,
     select: {
-      degrees: "",
+      degree: "",
       isSelected: false,
     },
     due_date: "",
     description: "",
     isValid: {
       institute: false,
+      degree: false,
       due_date: false,
       description: false,
     },

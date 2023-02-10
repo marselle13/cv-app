@@ -11,7 +11,6 @@ import EduCV from "./EduCV";
 const CVResult = () => {
   const { cvData, tab, setTab } = useContext(cvContext);
   const { postData } = cvData;
-  console.log(postData);
 
   return (
     <div className={classes.cvResult}>

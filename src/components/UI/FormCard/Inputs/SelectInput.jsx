@@ -4,8 +4,8 @@ import dropdown from "../../../../assets/dropdown.png";
 import cvContext from "../../../Store/cvContext";
 
 const SelectInput = (props) => {
-  const ctx = useContext(cvContext);
-  const { cvData, cvChangeHandler } = ctx;
+  const { cvData, cvChangeHandler, degrees, onOptionClicked } =
+    useContext(cvContext);
 
   return (
     <div className={classes.selectDiv}>
@@ -28,18 +28,19 @@ const SelectInput = (props) => {
       {cvData.education[props.index].select.isSelected && (
         <div className={classes.dropDownContainer}>
           <ul>
-            {ctx.degrees.map((option) => (
-              <li
-                onClick={ctx.onOptionClicked(
-                  option.id,
-                  option.title,
-                  props.index
-                )}
-                key={option.id}
-              >
-                {option.title}
-              </li>
-            ))}
+            {degrees &&
+              degrees.map((option) => (
+                <li
+                  onClick={onOptionClicked(
+                    option.id,
+                    option.title,
+                    props.index
+                  )}
+                  key={option.id}
+                >
+                  {option.title}
+                </li>
+              ))}
           </ul>
         </div>
       )}

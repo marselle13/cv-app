@@ -1,17 +1,14 @@
 import landingBack from "../../../assets/landing-back.png";
 import classes from "./BackLandingButton.module.css";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useContext, useEffect } from "react";
-import cvContext from "../../Store/cvContext";
+import { useNavigate } from "react-router-dom";
 
 const BackLandingButton = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const { cvData } = useContext(cvContext);
-  console.log(cvData);
 
   const clear = () => {
     navigate("/");
+    localStorage.clear();
+    window.location.reload();
   };
 
   return (

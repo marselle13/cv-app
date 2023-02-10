@@ -4,7 +4,7 @@ import backgroundLogo from "../../assets/background-logo.png";
 import classes from "./LandingPage.module.css";
 import React, { useEffect } from "react";
 
-const LandingPage = (props) => {
+const LandingPage = () => {
   const location = useLocation();
 
   useEffect(() => {

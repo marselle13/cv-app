@@ -1,15 +1,19 @@
 import { useContext } from "react";
+import { useLocation } from "react-router-dom";
 import cvContext from "../Store/cvContext";
 import CVCard from "../UI/CVcard/CVCard";
 import classes from "./ExpCV.module.css";
 
 const ExpCV = (props) => {
-  const { submitArrExp, addExpSize, isSubmitExp } = useContext(cvContext);
+  const { submitArrExp, addExpSize, isSubmitExp, cvData } =
+    useContext(cvContext);
+  const location = useLocation();
   const show = submitArrExp.filter((item) => item === true || item === false);
 
   return (
     <div className={classes.expDiv}>
-      {show.length !== 0 && <h4>გამოცდილება</h4>}
+      {show.length !== 0 && location.pathname !== "/cv" && <h4>გამოცდილება</h4>}
+      {cvData.postData && location.pathname === "/cv" && <h4>გამოცდილება</h4>}
 
       {props.experience &&
         props.experience.map((exp, index) => {

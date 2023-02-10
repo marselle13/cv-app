@@ -5,18 +5,19 @@ import classes from "./Education.module.css";
 import EducationFormInputs from "./EducationFormInputs";
 
 const EducationForm = () => {
-  const ctx = useContext(cvContext);
+  const { addEduSize, submitHandlerEdu, addEdu } = useContext(cvContext);
   const education = {
     institute: "",
     degree_id: null,
     select: {
-      degrees: "",
+      degree: "",
       isSelected: false,
     },
     due_date: "",
     description: "",
     isValid: {
       institute: false,
+      degree: false,
       due_date: false,
       description: false,
     },
@@ -25,14 +26,15 @@ const EducationForm = () => {
   return (
     <form
       className={classes.education}
-      style={{ paddingBottom: ctx.addEduSize && "65px" }}
-      onSubmit={ctx.submitHandlerEdu}
+      style={{ paddingBottom: addEduSize && "65px" }}
+      onSubmit={submitHandlerEdu}
     >
       <EducationFormInputs />
       <ButtonContainer
         back="/experience"
-        add={(e) => ctx.addEdu(e, education)}
+        add={(e) => addEdu(e, education)}
         label="სხვა სასწავლებლის დამატება"
+        buttonLabel="დასრულება"
       />
     </form>
   );

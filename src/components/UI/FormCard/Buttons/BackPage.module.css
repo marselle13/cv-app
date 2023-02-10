@@ -12,3 +12,11 @@
   text-align: center;
   padding: 14px;
 }
+
+.backPage:hover {
+  background: #7949ff;
+}
+
+.backPage:focus {
+  background: #512faf;
+}

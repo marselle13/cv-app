@@ -4,9 +4,6 @@
   margin: 45px 70px 135px 45px;
 }
 
-.cvBorder {
-  border: 0.8px solid #000000;
-}
 
 .cvResult .cvResultDiv {
   position: relative;
@@ -53,23 +50,4 @@
   color: #1a1a1a;
 }
 
-.cv {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 1rem;
-  align-items: flex-start;
-  max-width: 822px;
-  max-height: 1080px;
-  width: 100%;
-  padding: 50px 80px 44px;
-  background-color: #fff;
-  overflow-x: hidden;
-  overflow-y: auto;
-  position: sticky;
-  top: 0;
-}
 
-.cv .cvDiv {
-  width: 100%;
-}

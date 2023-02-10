@@ -4,45 +4,49 @@ import classes from "./PersonalCV.module.css";
 import email from "../../assets/email.png";
 import mobile from "../../assets/mobile.png";
 
-const PersonalCV = () => {
-  const ctx = useContext(cvContext);
-  const { cvData } = ctx;
-  const { personal } = cvData;
+const PersonalCV = (props) => {
+  const { border } = useContext(cvContext);
 
   return (
     <div
       className={classes.personalDiv}
-      style={{ borderBottom: ctx.border && "1px solid  #C8C8C8" }}
+      style={{ borderBottom: border && "1px solid  #C8C8C8" }}
     >
       <div>
-        {(personal.name || personal.surname) && (
+        {(props.name || props.surname) && (
           <div className={classes.nameDiv}>
             <h2>
-              {personal.name} {personal.surname}
+              {props?.name} {props?.surname}
             </h2>
           </div>
         )}
-        {personal.email && (
+        {props.email && (
           <div className={classes.contactDiv}>
             <img src={email} alt="email" />
-            <p>{personal.email}</p>
+            <p>{props?.email}</p>
           </div>
         )}
-        {personal.phone_number && (
+        {props.phone_number && (
           <div className={classes.contactDiv}>
             <img src={mobile} alt="mobile" />
-            <p>{personal.phone_number}</p>
+            <p>{props?.phone_number}</p>
           </div>
         )}
-        {personal.bio && (
+        {props.bio && (
           <div className={classes.bioDiv}>
             <label>ჩემ შესახებ</label>
-            <p>{personal.bio}</p>
+            <p>{props?.bio}</p>
           </div>
         )}
       </div>
       <div className={classes.imageDiv}>
-        {personal.image && <img src={personal.image} alt="personal" />}
+        {props.image && <img src={props?.image} alt="personal" />}
+        {props.storage && (
+          <img
+            src={`https://resume.redberryinternship.ge${props?.storage}`}
+            alt="personal"
+          />
+        )}
       </div>
     </div>
   );

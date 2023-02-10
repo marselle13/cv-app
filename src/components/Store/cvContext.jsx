@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 const cvContext = React.createContext({
   cvData: {},
@@ -7,7 +7,10 @@ const cvContext = React.createContext({
 });
 
 export const CVContextProvider = (props) => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [degrees, setDegress] = useState({});
+  const [postData, setPostData] = useState("");
   const [tab, setTab] = useState(false);
   const [isSubmit, setIsSubmit] = useState(
     localStorage.getItem("submit") || ""
@@ -15,7 +18,6 @@ export const CVContextProvider = (props) => {
   const [isSubmitExp, setIsSubmitExp] = useState(
     localStorage.getItem("submitExp") || ""
   );
-  const navigate = useNavigate();
   const [border, setBorder] = useState(localStorage.getItem("border") || "");
   const [addExpSize, setAddExpSize] = useState(
     localStorage.getItem("expSize") || false
@@ -35,6 +37,7 @@ export const CVContextProvider = (props) => {
       surname: false,
       email: false,
       mobile: false,
+      image: false,
       phone_number: false,
     },
   });
@@ -59,14 +62,14 @@ export const CVContextProvider = (props) => {
       institute: "",
       degree_id: null,
       select: {
-        degrees: "",
+        degree: "",
         isSelected: false,
       },
       due_date: "",
       description: "",
       isValid: {
         institute: false,
-        degrees: false,
+        degree: false,
         due_date: false,
         description: false,
       },
@@ -86,6 +89,10 @@ export const CVContextProvider = (props) => {
     if (savedEducation) {
       setEducation(savedEducation);
     }
+    const storedData = JSON.parse(localStorage.getItem("postData"));
+    if (storedData) {
+      setPostData(storedData);
+    }
     getData();
   }, []);
   useEffect(() => {
@@ -104,7 +111,17 @@ export const CVContextProvider = (props) => {
   }, [experience]);
   useEffect(() => {
     localStorage.setItem("education", JSON.stringify(education));
-  });
+  }, [education]);
+  useEffect(() => {
+    localStorage.setItem("postData", JSON.stringify(postData));
+  }, [postData]);
+  useEffect(() => {
+    if (location.pathname === "/cv") {
+      localStorage.removeItem("personal");
+      localStorage.removeItem("experience");
+      localStorage.removeItem("education");
+    }
+  }, [location.pathname]);
 
   const getData = async () => {
     const response = await fetch(
@@ -118,7 +135,8 @@ export const CVContextProvider = (props) => {
     personal.isValid.name &&
     personal.isValid.surname &&
     personal.isValid.email &&
-    personal.isValid.phone_number;
+    personal.isValid.phone_number &&
+    personal.isValid.image;
 
   const submitHandlerPersonal = (e) => {
     e.preventDefault();
@@ -154,11 +172,11 @@ export const CVContextProvider = (props) => {
   const submitArrExp = experience.map((exp, index) => {
     let checkInputs = [];
     const submitIsValidExp =
-      experience[index].isValid.position &&
-      experience[index].isValid.employer &&
-      experience[index].isValid.start_date &&
-      experience[index].isValid.due_date &&
-      experience[index].isValid.description;
+      exp.isValid.position &&
+      exp.isValid.employer &&
+      exp.isValid.start_date &&
+      exp.isValid.due_date &&
+      exp.isValid.description;
 
     const { position, employer, start_date, due_date, description } = exp;
     if (position || employer || start_date || due_date || description) {
@@ -179,10 +197,13 @@ export const CVContextProvider = (props) => {
   };
 
   const eduHandler = (index, field, value) => {
-    const updateFormsEdu = [...education];
-    updateFormsEdu[index][field] = value;
-    updateFormsEdu[index].isValid = isValidEdu(education[index]);
-    setEducation(updateFormsEdu);
+    setEducation((prev) => {
+      const updateFormsEdu = [...prev];
+      updateFormsEdu[index][field] = value;
+      updateFormsEdu[index].isValid = isValidEdu(education[index]);
+
+      return updateFormsEdu;
+    });
   };
 
   const selectHandler = (index) => {
@@ -193,17 +214,20 @@ export const CVContextProvider = (props) => {
   };
 
   const onOptionClicked = (id, value, index) => () => {
-    const updateSelect = [...education];
-    console.log(updateSelect);
-    updateSelect[index].degree_id = id;
-    updateSelect[index].select.degrees = value;
-    setEducation(updateSelect);
-    updateSelect[index].select.isSelected =
-      !updateSelect[index].select.isSelected;
+    setEducation((prev) => {
+      const updateSelect = [...prev];
+      updateSelect[index].degree_id = id;
+      updateSelect[index].select.degree = value;
+      updateSelect[index].isValid = isValidEdu(education[index]);
+      updateSelect[index].select.isSelected =
+        !updateSelect[index].select.isSelected;
+      return updateSelect;
+    });
   };
 
   const isValidEdu = (form) => ({
     institute: form.institute.trim().length > 1,
+    degree: form.degree_id > 0,
     due_date: form.due_date.length !== 0,
     description: form.description.length !== 0,
   });
@@ -215,33 +239,60 @@ export const CVContextProvider = (props) => {
     setAddEduSize(true);
   };
 
-  const submitArrEdu = education.map((edu, index) => {
-    let eduUpdate = [];
+  const submitArrEdu = education.map((edu) => {
+    let checkInputs = [];
     const submitIsValidEdu =
-      education[index].isValid.institute &&
-      education[index].select.degrees &&
-      education[index].isValid.due_date &&
-      education[index].isValid.description;
-    const { institute, select, due_date, description } = edu;
-    if (institute || select.degrees || due_date || description) {
-      eduUpdate = submitIsValidEdu;
+      edu.isValid.institute &&
+      edu.isValid.due_date &&
+      edu.isValid.description &&
+      edu.isValid.degree;
+    const { institute, degree_id, due_date, description } = edu;
+    if (institute || degree_id || due_date || description) {
+      checkInputs = submitIsValidEdu;
     }
-    return eduUpdate;
+
+    return checkInputs;
   });
+
+  const submitHandlerEdu = async (e) => {
+    e.preventDefault();
+    const trueArr = submitArrEdu.filter((item) => item === true);
+    const falseArr = submitArrEdu.filter((item) => item === false);
+
+    if (trueArr.length > 0 && falseArr.length === 0) {
+      handleSubmit();
+    }
+  };
+
+  const pushToJSON = (array, arrayPush) => {
+    const filteredExperience = array.filter((value) => {
+      for (const key in value.isValid) {
+        return value.isValid[key] === true;
+      }
+      return false;
+    });
+    filteredExperience.forEach((exp) => {
+      arrayPush.push(exp);
+    });
+  };
 
   const handleSubmit = async () => {
     const blob = await axios.get(personal.image, { responseType: "blob" });
     const file = new File([blob.data], "File name", { type: "image/png" });
+
     const jsonData = {
       name: personal.name,
       image: file,
       surname: personal.surname,
-      bio: personal.bio,
+      about_me: personal.bio,
       email: personal.email,
       phone_number: personal.phone_number,
-      experiences: [experience[0]],
-      educations: [education[0]],
+      experiences: [],
+      educations: [],
     };
+
+    pushToJSON(experience, jsonData.experiences);
+    pushToJSON(education, jsonData.educations);
 
     axios
       .post("https://resume.redberryinternship.ge/api/cvs", jsonData, {
@@ -251,25 +302,16 @@ export const CVContextProvider = (props) => {
         },
       })
       .then((response) => {
-        console.log(response);
+        setPostData(response.data);
+        setIsSubmit("true");
         setTab(true);
+        navigate("/cv");
       })
       .catch((error) => {
+        setIsSubmit("");
+        setTab(false);
         console.error(error);
       });
-  };
-
-  const submitHandlerEdu = async (e) => {
-    e.preventDefault();
-    const trueArr = submitArrEdu.filter((item) => item === true);
-    const falseArr = submitArrEdu.filter((item) => item === false);
-    const emptyArr = submitArrEdu.filter((item) => item === "");
-
-    if (trueArr.length > 0 && falseArr.length === 0 && emptyArr.length === 0) {
-      handleSubmit();
-      navigate("/cv");
-      setIsSubmit("true");
-    }
   };
 
   return (
@@ -279,6 +321,7 @@ export const CVContextProvider = (props) => {
           personal,
           experience,
           education,
+          postData,
         },
         cvChangeHandler: {
           setPersonal,

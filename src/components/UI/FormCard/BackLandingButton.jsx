@@ -1,14 +1,18 @@
 import landingBack from "../../../assets/landing-back.png";
 import classes from "./BackLandingButton.module.css";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-const BackLandingButton = (props) => {
+const BackLandingButton = () => {
+  const navigate = useNavigate();
+
+  const clear = () => {
+    navigate("/");
+  };
+
   return (
-    <Link to="/" onClick={props.end}>
-      <button className={classes.backLanding}>
-        <img src={landingBack} alt="" />
-      </button>
-    </Link>
+    <button className={classes.backLanding} onClick={clear}>
+      <img src={landingBack} alt="" />
+    </button>
   );
 };
 

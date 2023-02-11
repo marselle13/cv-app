@@ -15,12 +15,14 @@
 .inputDiv label {
   cursor: pointer;
   width: 100%;
+  width: 107px;
+  padding: 4px 19px;
 }
 
 .uploadDiv .inputDiv {
   background: #0e80bf;
-  padding: 4px 19px 6px;
   border: none;
+  padding: 4px 0px;
   border-radius: 4px;
   color: white;
 }

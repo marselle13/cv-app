@@ -4,14 +4,13 @@
   margin: 45px 70px 135px 45px;
 }
 
-
 .cvResult .cvResultDiv {
   position: relative;
   width: 822px;
   right: 550px;
   display: flex;
   gap: 50px;
-  margin-top: 10px;
+  margin: 10px 0 130px;
   display: flex;
   height: 1080px;
 }
@@ -49,5 +48,3 @@
   line-height: 43px;
   color: #1a1a1a;
 }
-
-

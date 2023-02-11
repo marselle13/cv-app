@@ -7,7 +7,8 @@ const InputUpload = (props) => {
         პირადი ფოტოს ატვირთვა
       </label>
       <div className={classes.inputDiv}>
-        <label htmlFor="file-input"> ატვირთვა</label>
+        <label htmlFor="file-input">ატვირთვა</label>
+
         <input
           type="file"
           style={{ display: "none" }}

@@ -150,6 +150,9 @@ export const CVContextProvider = (props) => {
 
   const expHandler = (index, field, value) => {
     const updateForms = [...experience];
+    if (field === "employer") {
+      value = value.replace(/[^\p{L}\p{N}\p{Z}]+/gu, "");
+    }
     updateForms[index][field] = value;
     updateForms[index].isValid = isValidExp(experience[index]);
     setExperience(updateForms);
@@ -273,10 +276,6 @@ export const CVContextProvider = (props) => {
       return false;
     });
     filteredExperience.forEach((exp) => {
-      if (exp.employer) {
-        const fixExp = exp.employer.replace(/[^\w\s]/gi, "");
-        exp.employer = fixExp;
-      }
       arrayPush.push(exp);
     });
   };

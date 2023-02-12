@@ -75,7 +75,6 @@ export const CVContextProvider = (props) => {
       },
     },
   ]);
-  const employerRegex = /^[\p{L}\p{N}\p{Z}]+$/u;
 
   useEffect(() => {
     const savedPersonal = JSON.parse(localStorage.getItem("personal"));
@@ -158,9 +157,7 @@ export const CVContextProvider = (props) => {
 
   const isValidExp = (form) => ({
     position: form.position.trim().length > 1,
-    employer:
-      form.employer.trim().length > 1 &&
-      employerRegex.test(form.employer.trim()),
+    employer: form.employer.trim().length > 1,
     start_date: form.start_date.length !== 0,
     due_date: form.due_date.length !== 0,
     description: form.description.length !== 0,
@@ -276,6 +273,10 @@ export const CVContextProvider = (props) => {
       return false;
     });
     filteredExperience.forEach((exp) => {
+      if (exp.employer) {
+        const fixExp = exp.employer.replace(/[^\w\s]/gi, "");
+        exp.employer = fixExp;
+      }
       arrayPush.push(exp);
     });
   };

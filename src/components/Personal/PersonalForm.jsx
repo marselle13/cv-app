@@ -30,6 +30,7 @@ const PersonalForm = () => {
   const uploadChangeHandler = (event) => {
     const reader = new FileReader();
     reader.readAsDataURL(event.target.files[0]);
+    if (+(event.target.files[0].size / 1000000).toFixed(3) > 2) return;
 
     reader.onload = () => {
       setPersonal({

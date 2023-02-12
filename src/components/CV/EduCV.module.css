@@ -1,6 +1,6 @@
 .eduDiv {
   margin-top: 24px;
-  line-break: anywhere;
+  word-break: break-word;
 }
 
 .eduDiv h4 {

@@ -3,7 +3,7 @@
   display: flex;
   justify-content: space-between;
   padding-bottom: 20px;
-  line-break: anywhere;
+  word-break: break-word;
 }
 
 .nameDiv h2 {

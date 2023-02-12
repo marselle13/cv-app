@@ -1,6 +1,6 @@
 .expDiv {
   margin-top: 24px;
-  line-break: anywhere;
+  word-break: break-word;
 }
 
 .expDiv h4 {

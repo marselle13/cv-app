@@ -1,5 +1,6 @@
 .expDiv {
   margin-top: 24px;
+  line-break: anywhere;
 }
 
 .expDiv h4 {

@@ -1,5 +1,6 @@
 .eduDiv {
   margin-top: 24px;
+  line-break: anywhere;
 }
 
 .eduDiv h4 {

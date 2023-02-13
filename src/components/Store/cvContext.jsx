@@ -12,6 +12,8 @@ export const CVContextProvider = (props) => {
   const [degrees, setDegress] = useState({});
   const [postData, setPostData] = useState("");
   const [tab, setTab] = useState(false);
+  const [emptyPersonal, setEmptyPersonal] = useState(false);
+  const [emptyExperience, setEmptyExperience] = useState(false);
   const [isSubmit, setIsSubmit] = useState(
     localStorage.getItem("submit") || ""
   );
@@ -146,15 +148,35 @@ export const CVContextProvider = (props) => {
       navigate("/experience");
       setBorder("done");
     }
+
+    if (!checkValidationPersonal) {
+      setEmptyPersonal(true);
+    }
   };
 
-  const expHandler = (index, field, value) => {
+  const expHandler = async (index, field, value) => {
     const updateForms = [...experience];
     if (field === "employer") {
       value = value.replace(/[^\p{L}\p{N}\p{Z}]+/gu, "");
     }
     updateForms[index][field] = value;
     updateForms[index].isValid = isValidExp(experience[index]);
+    const { position, employer, start_date, due_date, description } =
+      updateForms[index];
+    const submitExp = await submitArrFunction();
+    const falseArr = submitExp.filter((item) => item === false);
+    const trueArr = submitExp.filter((item) => item === true);
+
+    const formChecker =
+      position && employer && start_date && due_date && description;
+
+    if (formChecker && falseArr.length === 0) {
+      setEmptyExperience(false);
+    }
+
+    if (!formChecker && trueArr.length > 0 && falseArr.length === 0) {
+      setEmptyExperience(false);
+    }
     setExperience(updateForms);
   };
 
@@ -173,28 +195,39 @@ export const CVContextProvider = (props) => {
     setAddExpSize(true);
   };
 
-  const submitArrExp = experience.map((exp, index) => {
-    let checkInputs = [];
-    const submitIsValidExp =
-      exp.isValid.position &&
-      exp.isValid.employer &&
-      exp.isValid.start_date &&
-      exp.isValid.due_date &&
-      exp.isValid.description;
+  const submitArrFunction = async () => {
+    return Promise.all(
+      experience.map((exp) => {
+        let checkInputs = [];
+        const submitIsValidExp =
+          exp.isValid.position &&
+          exp.isValid.employer &&
+          exp.isValid.start_date &&
+          exp.isValid.due_date &&
+          exp.isValid.description;
 
-    const { position, employer, start_date, due_date, description } = exp;
-    if (position || employer || start_date || due_date || description) {
-      checkInputs = submitIsValidExp;
-    }
-    return checkInputs;
-  });
+        const { position, employer, start_date, due_date, description } = exp;
 
-  const submitHandlerExp = (e) => {
+        if (position || employer || start_date || due_date || description) {
+          checkInputs = submitIsValidExp;
+        }
+        return checkInputs;
+      })
+    );
+  };
+
+  const submitHandlerExp = async (e) => {
     e.preventDefault();
+    const submitArrExp = await submitArrFunction();
     const trueArr = submitArrExp.filter((item) => item === true);
     const falseArr = submitArrExp.filter((item) => item === false);
 
+    if (falseArr.length > 0 || (trueArr.length && falseArr.length) === 0) {
+      setEmptyExperience(true);
+    }
+
     if (trueArr.length > 0 && falseArr.length === 0) {
+      setEmptyExperience(false);
       navigate("/education");
       setIsSubmitExp("true");
     }
@@ -333,22 +366,24 @@ export const CVContextProvider = (props) => {
           eduHandler,
           selectHandler,
         },
-        tab,
-        setTab,
+
         border,
         addExp,
         addExpSize,
         addEdu,
         addEduSize,
         degrees,
-        onOptionClicked,
+        emptyExperience,
+        emptyPersonal,
         isSubmit,
         isSubmitExp,
-        submitHandlerPersonal,
-        submitHandlerExp,
+        onOptionClicked,
         submitHandlerEdu,
-        submitArrExp,
+        submitHandlerExp,
+        submitHandlerPersonal,
         submitArrEdu,
+        setTab,
+        tab,
       }}
     >
       {props.children}

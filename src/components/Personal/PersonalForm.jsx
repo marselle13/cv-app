@@ -14,6 +14,7 @@ const PersonalForm = () => {
   const regexGeorgian = /^[\u10A0-\u10FF]+$/;
   const regexEmail = /^[a-zA-Z0-9._%+-]+@redberry\.ge$/;
   const regexMobile = /^(\+995)(79\d{7}|5\d{8})$/;
+  const { emptyPersonal } = useContext(cvContext);
   const personalHandlerName = (e, field) => {
     setPersonal({
       ...personal,
@@ -51,6 +52,7 @@ const PersonalForm = () => {
           label="სახელი"
           valid="მინიმუმ 2 ასო, ქართული ასოები"
           onChange={(e) => personalHandlerName(e, "name")}
+          empty={emptyPersonal}
           value={personal.name}
           isValid={personal.isValid.name}
           placeholder="ანზორი"
@@ -61,13 +63,18 @@ const PersonalForm = () => {
           onChange={(e) => {
             personalHandlerName(e, "surname");
           }}
+          empty={emptyPersonal}
           value={personal.surname}
           isValid={personal.isValid.surname}
           placeholder="მუმლაძე"
         />
       </div>
       <div>
-        <InputUpload onChange={uploadChangeHandler} />
+        <InputUpload
+          onChange={uploadChangeHandler}
+          isValid={personal.isValid.image}
+          empty={emptyPersonal}
+        />
         <InputArea
           rows="4"
           label="ჩემ შესახებ (არასავალდებულო)"
@@ -90,6 +97,7 @@ const PersonalForm = () => {
               },
             });
           }}
+          empty={emptyPersonal}
           value={personal.email}
           isValid={personal.isValid.email}
           placeholder="anzorr666@redberry.ge"
@@ -108,6 +116,7 @@ const PersonalForm = () => {
                 },
               });
             }}
+            empty={emptyPersonal}
             value={personal.phone_number}
             isValid={personal.isValid.phone_number}
             placeholder="+995 551 12 34 56"

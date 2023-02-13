@@ -30,3 +30,11 @@
 .areaDiv .passBorder {
   outline: 1px solid #98e37e !important;
 }
+
+.areaDiv .errorBorder {
+  outline: 1px solid #ef5050 !important;
+}
+
+.areaDiv .errorLabel {
+  color: #e52f2f;
+}

@@ -7,7 +7,7 @@ import InputArea from "../UI/FormCard/Inputs/InputArea";
 
 const ExperienceFormInputs = () => {
   const ctx = useContext(cvContext);
-  const { cvChangeHandler } = ctx;
+  const { cvChangeHandler, emptyExperience } = ctx;
   const { cvData } = ctx;
   return (
     <Fragment>
@@ -17,6 +17,7 @@ const ExperienceFormInputs = () => {
             name="position"
             label="თანამდებობა"
             valid="მინიმუმ 2 სიმბოლო"
+            empty={emptyExperience}
             onChange={(event) =>
               cvChangeHandler.expHandler(index, "position", event.target.value)
             }
@@ -31,6 +32,7 @@ const ExperienceFormInputs = () => {
             onChange={(event) =>
               cvChangeHandler.expHandler(index, "employer", event.target.value)
             }
+            empty={emptyExperience}
             value={form.employer}
             isValid={form.isValid.employer}
             placeholder="დამსაქმებელი"
@@ -47,6 +49,7 @@ const ExperienceFormInputs = () => {
                   event.target.value
                 )
               }
+              empty={emptyExperience}
               value={form.start_date}
               isValid={form.isValid.start_date}
             />
@@ -59,6 +62,7 @@ const ExperienceFormInputs = () => {
                   event.target.value
                 )
               }
+              empty={emptyExperience}
               value={form.due_date}
               isValid={form.isValid.due_date}
             />
@@ -68,6 +72,7 @@ const ExperienceFormInputs = () => {
             label="აღწერა"
             rows="5"
             placeholder="როლი თანამდებობაზე და ზოგადი აღწერა"
+            empty={emptyExperience}
             onChange={(event) =>
               cvChangeHandler.expHandler(
                 index,

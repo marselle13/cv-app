@@ -1,9 +1,16 @@
 import classes from "./InputUpload.module.css";
 
 const InputUpload = (props) => {
+  console.log(props);
+
   return (
     <div className={classes.uploadDiv}>
-      <label htmlFor="inputDiv" className={classes.uploadLabel}>
+      <label
+        htmlFor="inputDiv"
+        className={`${classes.uploadLabel} ${
+          props.empty && !props.isValid && classes.errorLabel
+        }`}
+      >
         პირადი ფოტოს ატვირთვა
       </label>
       <div className={classes.inputDiv}>
@@ -15,6 +22,7 @@ const InputUpload = (props) => {
           id="file-input"
           onChange={props.onChange}
           accept="image/png, image/jpeg"
+          value={props.value}
         />
       </div>
     </div>

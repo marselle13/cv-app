@@ -12,6 +12,10 @@
   color: #1a1a1a;
 }
 
+.uploadDiv .errorLabel {
+  color: #e52f2f !important;
+}
+
 .inputDiv label {
   cursor: pointer;
   width: 100%;

@@ -8,7 +8,9 @@ const Input = (props) => {
       <label
         htmlFor=""
         className={`${
-          !props.isValid && props.value.length !== 0 ? classes.errorLabel : ""
+          ((!props.isValid && props.value.length !== 0) ||
+            (props.empty && props.value.length === 0)) &&
+          classes.errorLabel
         }`}
       >
         {props.label}
@@ -19,16 +21,18 @@ const Input = (props) => {
           onChange={props.onChange}
           value={props.value}
           className={`${props.isValid && classes.passBorder} ${
-            !props.isValid && props.value.length !== 0 && classes.errorBorder
+            ((!props.isValid && props.value.length !== 0) ||
+              (props.empty && props.value.length === 0)) &&
+            classes.errorBorder
           }`}
           placeholder={props.placeholder}
           name={props.name}
-    
         />
         {props.isValid && (
           <img src={passIcon} alt="pass" className={classes.pass} />
         )}
-        {!props.isValid && props.value.length !== 0 && (
+        {((!props.isValid && props.value.length !== 0) ||
+          (props.empty && props.value.length === 0)) && (
           <img src={errorIcon} alt="erorr" className={classes.error} />
         )}
       </div>

@@ -5,10 +5,9 @@ import CVCard from "../UI/CVcard/CVCard";
 import classes from "./ExpCV.module.css";
 
 const ExpCV = (props) => {
-  const { submitArrExp, addExpSize, isSubmitExp, cvData } =
-    useContext(cvContext);
+  const { addExpSize, isSubmitExp, cvData } = useContext(cvContext);
   const location = useLocation();
-  const show = submitArrExp.filter((item) => item === true || item === false);
+  let show = [];
 
   return (
     <div className={classes.expDiv}>

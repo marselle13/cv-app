@@ -8,7 +8,7 @@ const InputDate = (props) => {
         type="date"
         onChange={props.onChange}
         value={props.value}
-        className={`${props.isValid && classes.passBorder}`}
+        className={`${props.isValid && classes.passBorder} ${!props.isValid && props.empty && classes.errorBorder}`}
       />
     </div>
   );

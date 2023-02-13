@@ -5,7 +5,7 @@ import ExperienceFormInputs from "./ExperienceFormInputs";
 import classes from "./ExperienceFormInputs.module.css";
 
 const ExperienceForm = () => {
-  const ctx = useContext(cvContext);
+  const { submitHandlerExp, addExpSize, addExp } = useContext(cvContext);
   const exp = {
     position: "",
     employer: "",
@@ -24,13 +24,13 @@ const ExperienceForm = () => {
   return (
     <form
       className={classes.experience}
-      onSubmit={ctx.submitHandlerExp}
-      style={{ paddingBottom: ctx.addExpSize && "65px" }}
+      onSubmit={submitHandlerExp}
+      style={{ paddingBottom: addExpSize && "65px" }}
     >
       <ExperienceFormInputs />
       <ButtonContainer
         back="/personal"
-        add={(e) => ctx.addExp(e, exp)}
+        add={(e) => addExp(e, exp)}
         label="მეტი გამოცდილების დამატება"
         buttonLabel="შემდეგი"
       />

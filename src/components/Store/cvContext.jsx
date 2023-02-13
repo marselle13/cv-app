@@ -9,11 +9,14 @@ const cvContext = React.createContext({
 export const CVContextProvider = (props) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [showExpArr, setShowExpArr] = useState([]);
+  const [showEduArr, setShowEduArr] = useState([]);
   const [degrees, setDegress] = useState({});
   const [postData, setPostData] = useState("");
   const [tab, setTab] = useState(false);
   const [emptyPersonal, setEmptyPersonal] = useState(false);
   const [emptyExperience, setEmptyExperience] = useState(false);
+  const [emptyEducation, setEmptyEducation] = useState(false);
   const [isSubmit, setIsSubmit] = useState(
     localStorage.getItem("submit") || ""
   );
@@ -166,14 +169,13 @@ export const CVContextProvider = (props) => {
     const submitExp = await submitArrFunction();
     const falseArr = submitExp.filter((item) => item === false);
     const trueArr = submitExp.filter((item) => item === true);
-
+    const show = submitExp.filter((item) => item === true || item === false);
+    setShowExpArr(show);
     const formChecker =
       position && employer && start_date && due_date && description;
-
     if (formChecker && falseArr.length === 0) {
       setEmptyExperience(false);
     }
-
     if (!formChecker && trueArr.length > 0 && falseArr.length === 0) {
       setEmptyExperience(false);
     }
@@ -233,11 +235,31 @@ export const CVContextProvider = (props) => {
     }
   };
 
-  const eduHandler = (index, field, value) => {
-    setEducation((prev) => {
-      const updateFormsEdu = [...prev];
+  const eduHandler = async (index, field, value) => {
+    setEducation((prevState) => {
+      const updateFormsEdu = [...prevState];
       updateFormsEdu[index][field] = value;
-      updateFormsEdu[index].isValid = isValidEdu(education[index]);
+      updateFormsEdu[index].isValid = isValidEdu(prevState[index]);
+      const submitEdu = submitEduFunction();
+      submitEdu.then((result) => {
+        const falseArr = result.filter((item) => item === false);
+        const trueArr = result.filter((item) => item === true);
+        const show = result.filter((item) => item === true || item === false);
+        setShowEduArr(show);
+
+        const { institute, degree_id, due_date, description } =
+          updateFormsEdu[index];
+
+        const formChecker = institute && degree_id && due_date && description;
+
+        if (formChecker && falseArr.length === 0) {
+          setEmptyEducation(false);
+        }
+
+        if (!formChecker && trueArr.length > 0 && falseArr.length === 0) {
+          setEmptyEducation(false);
+        }
+      });
 
       return updateFormsEdu;
     });
@@ -276,27 +298,37 @@ export const CVContextProvider = (props) => {
     setAddEduSize(true);
   };
 
-  const submitArrEdu = education.map((edu) => {
-    let checkInputs = [];
-    const submitIsValidEdu =
-      edu.isValid.institute &&
-      edu.isValid.due_date &&
-      edu.isValid.description &&
-      edu.isValid.degree;
-    const { institute, degree_id, due_date, description } = edu;
-    if (institute || degree_id || due_date || description) {
-      checkInputs = submitIsValidEdu;
-    }
+  const submitEduFunction = async () => {
+    return Promise.all(
+      education.map((edu) => {
+        let checkInputs = [];
+        const submitIsValidEdu =
+          edu.isValid.institute &&
+          edu.isValid.due_date &&
+          edu.isValid.description &&
+          edu.isValid.degree;
+        const { institute, degree_id, due_date, description } = edu;
+        if (institute || degree_id || due_date || description) {
+          checkInputs = submitIsValidEdu;
+        }
 
-    return checkInputs;
-  });
+        return checkInputs;
+      })
+    );
+  };
 
   const submitHandlerEdu = async (e) => {
     e.preventDefault();
+    const submitArrEdu = await submitEduFunction();
     const trueArr = submitArrEdu.filter((item) => item === true);
     const falseArr = submitArrEdu.filter((item) => item === false);
 
+    if (falseArr.length > 0 || (trueArr.length && falseArr.length) === 0) {
+      setEmptyEducation(true);
+    }
+
     if (trueArr.length > 0 && falseArr.length === 0) {
+      setEmptyEducation(false);
       handleSubmit();
     }
   };
@@ -375,13 +407,16 @@ export const CVContextProvider = (props) => {
         degrees,
         emptyExperience,
         emptyPersonal,
+        emptyEducation,
         isSubmit,
         isSubmitExp,
         onOptionClicked,
+        showExpArr,
+        showEduArr,
         submitHandlerEdu,
         submitHandlerExp,
         submitHandlerPersonal,
-        submitArrEdu,
+
         setTab,
         tab,
       }}

@@ -65,3 +65,7 @@
 .dropDownContainer li:hover {
   background-color: #c3dcee;
 }
+
+.errorBorder {
+  outline: 1px solid #ef5050 !important;
+}

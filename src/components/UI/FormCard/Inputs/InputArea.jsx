@@ -1,8 +1,6 @@
 import classes from "./InputArea.module.css";
 
 const InputArea = (props) => {
-  console.log(props.empty);
-
   return (
     <div className={classes.areaDiv}>
       <label

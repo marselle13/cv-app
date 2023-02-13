@@ -1,8 +1,6 @@
 import classes from "./InputUpload.module.css";
 
 const InputUpload = (props) => {
-  console.log(props);
-
   return (
     <div className={classes.uploadDiv}>
       <label

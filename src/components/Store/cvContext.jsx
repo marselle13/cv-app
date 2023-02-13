@@ -9,6 +9,7 @@ const cvContext = React.createContext({
 export const CVContextProvider = (props) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [showExpArr, setShowExpArr] = useState([]);
   const [degrees, setDegress] = useState({});
   const [postData, setPostData] = useState("");
   const [tab, setTab] = useState(false);
@@ -166,14 +167,13 @@ export const CVContextProvider = (props) => {
     const submitExp = await submitArrFunction();
     const falseArr = submitExp.filter((item) => item === false);
     const trueArr = submitExp.filter((item) => item === true);
-
+    const show = submitExp.filter((item) => item === true || item === false);
+    setShowExpArr(show);
     const formChecker =
       position && employer && start_date && due_date && description;
-
     if (formChecker && falseArr.length === 0) {
       setEmptyExperience(false);
     }
-
     if (!formChecker && trueArr.length > 0 && falseArr.length === 0) {
       setEmptyExperience(false);
     }
@@ -378,6 +378,7 @@ export const CVContextProvider = (props) => {
         isSubmit,
         isSubmitExp,
         onOptionClicked,
+        showExpArr,
         submitHandlerEdu,
         submitHandlerExp,
         submitHandlerPersonal,

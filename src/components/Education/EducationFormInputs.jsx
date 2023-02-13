@@ -6,7 +6,8 @@ import SelectInput from "../UI/FormCard/Inputs/SelectInput";
 import InputDate from "../UI/FormCard/Inputs/InputDate";
 import InputArea from "../UI/FormCard/Inputs/InputArea";
 const EducationFormInputs = () => {
-  const { cvData, cvChangeHandler } = useContext(cvContext);
+  const { cvData, cvChangeHandler, emptyEducation } = useContext(cvContext);
+  console.log(cvData);
 
   return (
     <Fragment>
@@ -18,16 +19,22 @@ const EducationFormInputs = () => {
             onChange={(event) =>
               cvChangeHandler.eduHandler(index, "institute", event.target.value)
             }
+            empty={emptyEducation}
             value={form.institute}
             isValid={form.isValid.institute}
             placeholder="სასწავლებელი"
           />
           <div className={classes.formgrid}>
-            <SelectInput index={index} isValid={form.isValid.degrees} />
+            <SelectInput
+              index={index}
+              isValid={form.isValid.degrees}
+              empty={emptyEducation}
+            />
             <InputDate
               label="დამთავრების რიცხვი"
               isValid={form.isValid.due_date}
               value={form.due_date}
+              empty={emptyEducation}
               onChange={(event) =>
                 cvChangeHandler.eduHandler(
                   index,
@@ -42,6 +49,7 @@ const EducationFormInputs = () => {
             rows="7"
             isValid={form.isValid.description}
             value={form.description}
+            empty={emptyEducation}
             onChange={(event) =>
               cvChangeHandler.eduHandler(
                 index,

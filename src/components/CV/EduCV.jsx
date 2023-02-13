@@ -4,13 +4,14 @@ import { useContext } from "react";
 import CVCard from "../UI/CVcard/CVCard";
 import { useLocation } from "react-router-dom";
 const EduCV = (props) => {
-  const { cvData, submitArrEdu, addEduSize, isSubmit } = useContext(cvContext);
+  const { cvData, showEduArr, addEduSize, isSubmit } = useContext(cvContext);
   const location = useLocation(cvContext);
-  const show = submitArrEdu.filter((item) => item === true || item === false);
 
   return (
     <div className={classes.eduDiv}>
-      {show.length !== 0 && location.pathname !== "/cv" && <h4>განათლება</h4>}
+      {showEduArr.length !== 0 && location.pathname !== "/cv" && (
+        <h4>განათლება</h4>
+      )}
       {cvData.postData && location.pathname === "/cv" && <h4>განათლება</h4>}
 
       {(props.education || cvData.postData) &&

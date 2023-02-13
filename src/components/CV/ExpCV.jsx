@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { useLocation } from "react-router-dom";
 import cvContext from "../Store/cvContext";
 import CVCard from "../UI/CVcard/CVCard";

@@ -5,7 +5,8 @@ import classes from "./Education.module.css";
 import EducationFormInputs from "./EducationFormInputs";
 
 const EducationForm = () => {
-  const { addEduSize, submitHandlerEdu, addEdu } = useContext(cvContext);
+  const { addEduSize, submitHandlerEdu, addEdu, setEmptyEducation } =
+    useContext(cvContext);
   const education = {
     institute: "",
     degree_id: null,
@@ -35,6 +36,7 @@ const EducationForm = () => {
         add={(e) => addEdu(e, education)}
         label="სხვა სასწავლებლის დამატება"
         buttonLabel="დასრულება"
+        empty={setEmptyEducation}
       />
     </form>
   );

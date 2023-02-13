@@ -411,12 +411,13 @@ export const CVContextProvider = (props) => {
         isSubmit,
         isSubmitExp,
         onOptionClicked,
+        setEmptyExperience,
+        setEmptyEducation,
         showExpArr,
         showEduArr,
         submitHandlerEdu,
         submitHandlerExp,
         submitHandlerPersonal,
-
         setTab,
         tab,
       }}

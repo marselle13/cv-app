@@ -10,7 +10,7 @@ const ButtonContainer = (props) => {
       <AddMoreButtton onClick={props.add}>{props.label}</AddMoreButtton>
       <div className={classes.backNextDiv}>
         <Link to={props.back}>
-          <BackPageButton />
+          <BackPageButton onClick={props.empty}/>
         </Link>
         <NextPageButton
           onClick={props.onClick}

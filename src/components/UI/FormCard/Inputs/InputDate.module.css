@@ -30,3 +30,6 @@
 .dateDiv .errorBorder {
   outline: 1px solid #ef5050 !important;
 }
+.dateDiv .errorLabel {
+  color: #e52f2f;
+}

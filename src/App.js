@@ -15,7 +15,13 @@ function App() {
     <div>
       <Suspense
         fallback={
-          <div className="centered">
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              marginTop: "424px",
+            }}
+          >
             <LoadingSpinner />
           </div>
         }

@@ -5,7 +5,7 @@ const InputDate = (props) => {
     <div className={classes.dateDiv}>
       <label
         htmlFor=""
-        className={!props.isValid && props.empty && classes.errorLabel}
+        className={!props.isValid && props.empty ? classes.errorLabel : ""}
       >
         {props.label}
       </label>
@@ -13,8 +13,8 @@ const InputDate = (props) => {
         type="date"
         onChange={props.onChange}
         value={props.value}
-        className={`${props.isValid && classes.passBorder} ${
-          !props.isValid && props.empty && classes.errorBorder
+        className={`${props.isValid ? classes.passBorder : ""} ${
+          !props.isValid && props.empty ? classes.errorBorder : ""
         }`}
       />
     </div>

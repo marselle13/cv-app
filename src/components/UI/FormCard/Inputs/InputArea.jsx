@@ -4,7 +4,9 @@ const InputArea = (props) => {
   return (
     <div className={classes.areaDiv}>
       <label
-        className={`${props.empty && !props.isValid && classes.errorLabel}`}
+        className={`${
+          props.empty && !props.isValid ? classes.errorLabel : " "
+        }`}
       >
         {props.label}
       </label>
@@ -14,8 +16,8 @@ const InputArea = (props) => {
         rows={props.rows}
         onChange={props.onChange}
         value={props.value}
-        className={`${props.isValid && classes.passBorder} ${
-          props.empty && !props.isValid && classes.errorBorder
+        className={`${props.isValid ? classes.passBorder : ""} ${
+          props.empty && !props.isValid ? classes.errorBorder : ""
         }`}
       />
     </div>

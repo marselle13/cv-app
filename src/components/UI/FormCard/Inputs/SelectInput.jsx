@@ -9,10 +9,18 @@ const SelectInput = (props) => {
 
   return (
     <div className={classes.selectDiv}>
-      <label className={!cvData.education[props.index].isValid.degree && props.empty && classes.errorLabel}>ხარისხი</label>
+      <label
+        className={
+          !cvData.education[props.index].isValid.degree && props.empty
+            ? classes.errorLabel
+            : ""
+        }
+      >
+        ხარისხი
+      </label>
       <div
         className={`${classes.selectContainer} ${
-          cvData.education[props.index].isValid.degree && classes.passBorder
+          cvData.education[props.index].isValid.degree ? classes.passBorder : ""
         } ${
           props.empty &&
           !cvData.education[props.index].isValid.degree &&

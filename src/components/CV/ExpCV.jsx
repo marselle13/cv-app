@@ -7,6 +7,7 @@ import classes from "./ExpCV.module.css";
 const ExpCV = (props) => {
   const { showExpArr, addExpSize, isSubmitExp, cvData } = useContext(cvContext);
   const location = useLocation();
+  console.log(showExpArr);
 
   return (
     <div className={classes.expDiv}>

@@ -9,8 +9,12 @@ const cvContext = React.createContext({
 export const CVContextProvider = (props) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [showExpArr, setShowExpArr] = useState([]);
-  const [showEduArr, setShowEduArr] = useState([]);
+  const [showExpArr, setShowExpArr] = useState(
+    JSON.parse(localStorage.getItem("showExp")) || []
+  );
+  const [showEduArr, setShowEduArr] = useState(
+    JSON.parse(localStorage.getItem("showEdu")) || []
+  );
   const [degrees, setDegress] = useState({});
   const [postData, setPostData] = useState("");
   const [tab, setTab] = useState(false);
@@ -171,6 +175,7 @@ export const CVContextProvider = (props) => {
     const trueArr = submitExp.filter((item) => item === true);
     const show = submitExp.filter((item) => item === true || item === false);
     setShowExpArr(show);
+    localStorage.setItem("showExp", JSON.stringify(show));
     const formChecker =
       position && employer && start_date && due_date && description;
     if (formChecker && falseArr.length === 0) {
@@ -246,6 +251,7 @@ export const CVContextProvider = (props) => {
         const trueArr = result.filter((item) => item === true);
         const show = result.filter((item) => item === true || item === false);
         setShowEduArr(show);
+        localStorage.setItem("showEdu", JSON.stringify(show));
 
         const { institute, degree_id, due_date, description } =
           updateFormsEdu[index];

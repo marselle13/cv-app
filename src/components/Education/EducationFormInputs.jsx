@@ -7,7 +7,6 @@ import InputDate from "../UI/FormCard/Inputs/InputDate";
 import InputArea from "../UI/FormCard/Inputs/InputArea";
 const EducationFormInputs = () => {
   const { cvData, cvChangeHandler, emptyEducation } = useContext(cvContext);
-  console.log(cvData);
 
   return (
     <Fragment>
